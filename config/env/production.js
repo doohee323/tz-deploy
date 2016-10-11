@@ -19,7 +19,7 @@ module.exports = {
 			dbPassword: "1",
       dbHost: "52.0.156.21",
       port: 3306,
-      database: "tzhunting",
+      database: "tzchat",
       connectionLimit: 100,
 			poolUseYn: true        
     },

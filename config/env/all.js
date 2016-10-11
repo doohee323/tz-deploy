@@ -24,7 +24,7 @@ module.exports = {
 }
 
 process.env['appKeys'] = 'app_info';
-process.env['database'] = 'tzhunting';
+process.env['database'] = 'tzchat';
 
 // url for password email
 if(process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
