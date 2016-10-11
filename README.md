@@ -4,7 +4,7 @@ install Tz-Socket app on vagrant
 
 ```
 
-cd /Users/mac/Documents/workspace/js/tz-socket
+cd /Users/mac/Documents/workspace/php/tz-chat/tz-socket
 node --debug app.js
 
 open eclipse and run debug
