@@ -9,13 +9,13 @@
  */
 
 var config = {
-  domain : 'http://192.168.82.170',
+  domain : 'http://www.tzchat.net',
   NODE_ENV : 'development',
   socketLogined : false
 };
 
-if(location.hostname === '52.90.246.3') {
-  config.domain = 'http://52.90.246.3';
+if(location.hostname === 'xxx.xxx.xxx.xxx') {
+  config.domain = 'http://xxx.xxx.xxx.xxx';
 }
 
 angular.module(

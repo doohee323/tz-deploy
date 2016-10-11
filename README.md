@@ -1,6 +1,16 @@
 # Tz-Socket app
 
-install Tz-Socket app on vagrant
+run the app on vagrant
+
+```
+
+cd /vagrant/tz-socket
+
+killall node; node app.js
+
+```
+
+run the app on local env
 
 ```
 
