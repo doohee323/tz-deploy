@@ -4,7 +4,7 @@ module.exports = {
     app: {
       name: "tz-socket - Production",
       port: 3000,
-      domain: 'http://localhost',
+      domain: 'http://www.topzone.biz',
 			instance_no: 0
     },
     socket: {

@@ -4,13 +4,13 @@ module.exports = {
     app: {
       name: "tz-socket - Staging",
       port: 3000,
-			domain: 'http://localhost',
+			domain: 'http://www.topzone.biz',
 			instance_no: 0
     },
     socket: {
     	useYn: 'Y',
 			port: '3002',
-			domain: 'http://localhost',
+			domain: 'http://www.topzone.biz',
 			occupy_minutes: 5
     },
     mysql: {

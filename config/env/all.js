@@ -28,7 +28,7 @@ process.env['database'] = 'tzchat';
 
 // url for password email
 if(process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
-  process.env['url'] = 'localhost:3000';
+  process.env['url'] = 'www.topzone.biz:3000';
 }
 else if(process.env['NODE_ENV'] === 'production') {
   process.env['url'] = 'developers.gettopzone.com';
