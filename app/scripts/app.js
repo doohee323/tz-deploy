@@ -9,13 +9,13 @@
  */
 
 var config = {
-  domain : 'http://www.tzchat.net',
+  domain : 'http://www.topzone.biz',
   NODE_ENV : 'development',
   socketLogined : false
 };
 
-if(location.hostname === 'xxx.xxx.xxx.xxx') {
-  config.domain = 'http://xxx.xxx.xxx.xxx';
+if(location.hostname === 'www.topzone.biz') {
+  config.domain = 'http://www.topzone.biz';
 }
 
 angular.module(
