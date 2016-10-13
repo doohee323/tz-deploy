@@ -97,10 +97,10 @@ angular.module('tzSocket').factory(
                   debugger;
                 }
               } else {
-                alert('조회를 실패하였습니다.');
+                alert('Query를 실패하였습니다.');
               }
             }, function errorCallback(res) {
-              alert('조회를 실패하였습니다.');
+              alert('Query를 실패하였습니다.');
             });
       }
 
