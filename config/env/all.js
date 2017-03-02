@@ -17,18 +17,18 @@ module.exports = {
 	logs_dir: './logs',
 	
 	// expressJwt secret
-	sessionSecret: 'tz-socket',
+	sessionSecret: 'sdt-deploy',
 
 	// The name of the MongoDB collection to store sessions in
 	sessionCollection: 'sessions'
 }
 
 process.env['appKeys'] = 'app_info';
-process.env['database'] = 'tzchat';
+process.env['database'] = 'sdtDeploy';
 
 // url for password email
 if(process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
-  process.env['url'] = 'www.topzone.biz:3000';
+  process.env['url'] = 'sodatransfer.com:3000';
 }
 else if(process.env['NODE_ENV'] === 'production') {
   process.env['url'] = 'developers.gettopzone.com';

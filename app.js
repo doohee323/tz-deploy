@@ -11,7 +11,6 @@ var winston = require('winston');
 //var prototype = require('./app/scripts/common/utils/prototype');
 var util = require('util');
 var utils = require('./helpers/utils');
-var socketHelper = require('./config/socket.js');
 	
 /**
  * Main application entry file.
@@ -62,31 +61,8 @@ var appExports = module.exports = {};
 appExports.config = config;
 appExports.utils = utils;
 appExports.winston = winston;
-appExports.socketHelper = socketHelper;
 
 // Express settings
 require('./config/express')(app);
-
-//// redis subscribe
-//var redis, redis_helpers, subClient;
-//if(config.redis.useYn == 'Y') {
-//	redis = require("redis");
-//console.log('~~~~~~~');
-//	redis_helpers = require('./helpers/redis_helpers.js');
-//	subClient = redis.createClient(config.redis.port, config.redis.host);
-//	subClient.on("subscribe", function (channel, count) {
-//		console.log('subscribe: ' + channel);
-//		//debugger;
-//	});
-//	subClient.on("message", function(channel, message) {
-//		debugger;
-//		redis_helpers(message);
-//	    //subClient.unsubscribe();
-//	    //subClient.end();
-//	});
-//	subClient.subscribe("pubChannel");
-//}
-
-socketHelper.init(app);
 
 console.log('started!!!!');

@@ -2,16 +2,10 @@
 
 module.exports = {
     app: {
-      name: "tz-socket - Staging",
+      name: "sdt-deploy - Staging",
       port: 3000,
-			domain: 'http://www.topzone.biz',
+			domain: 'http://sodatransfer.com',
 			instance_no: 0
-    },
-    socket: {
-    	useYn: 'Y',
-			port: '3002',
-			domain: 'http://www.topzone.biz',
-			occupy_minutes: 5
     },
     mysql: {
       env: "local",
@@ -19,7 +13,7 @@ module.exports = {
 			dbPassword: "1",
       dbHost: "127.0.0.1",
       port: 3306,
-      database: "tzchat",
+      database: "sdtDeploy",
       connectionLimit: 100,
 			poolUseYn: true        
     },

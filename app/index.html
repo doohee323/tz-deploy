@@ -12,11 +12,9 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-	<link rel="stylesheet" href="styles/front-base.css">
-	<link rel="stylesheet" href="styles/front-style.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="tzSocket">
+  <body ng-app="sdtDeploy">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -24,11 +22,6 @@
 	<div class="wrap">
 	    <div ng-view=""></div>
 	</div>
-
-	<script type="text/javascript">
-	  var socketUrl = document.location.protocol + '//' + document.location.hostname + ':3002' + '/socket.io/socket.io.js';
-	  document.write('\x3Cscript src="' + socketUrl + '">\x3C/script>');
-	</script>    
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -56,9 +49,7 @@
     <script src="scripts/utils/utils.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/utils/storage.js"></script>
-    <script src="scripts/utils/commcd.js"></script>
     <script src="scripts/controllers/main.js"></script>
-	<script src="scripts/services/socket_service.js"></script>
     <!-- endbuild -->
 </body>
 </html>

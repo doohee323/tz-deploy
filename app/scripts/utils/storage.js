@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('tzSocket').factory(
+angular.module('sdtDeploy').factory(
     'StorageCtrl',
     function() {
       var $scope;

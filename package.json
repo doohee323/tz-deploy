@@ -1,5 +1,5 @@
 {
-  "name": "tz-socket",
+  "name": "sdt-deploy",
   "version": "0.0.0",
   "dependencies": {
     "autoprefixer-core": "^5.2.1",
@@ -48,8 +48,6 @@
     "phantomjs-prebuilt": "^2.1.12",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.11.1",
-    "socket.io": "^1.4.8",
-    "socket.io-client": "^1.4.8",
     "time-grunt": "^1.0.0",
     "winston": "~0.7.2"
   },

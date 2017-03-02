@@ -14,23 +14,23 @@ module.exports = function(app, fs) {
     })
   });
 
-  // ex) http://www.topzone.biz:3000/socket_insert/doohee323
-  app.get('/socket_insert/:roomid', function(req, res) {
-    session.socket_insert(req, res, function(err, data) {
+  // ex) http://sodatransfer.com:3000/deploy_insert/doohee323
+  app.get('/deploy_insert/:roomid', function(req, res) {
+    session.deploy_insert(req, res, function(err, data) {
       return utils.res(res, data);
     });
   });
   
-  // ex) http://www.topzone.biz:3000/talklist
+  // ex) http://sodatransfer.com:3000/talklist
   app.get('/talklist', function(req, res) {
     session.talklist(req, res, function(err, data) {
       return utils.res(res, data);
     });
   });
   
-  // ex) http://www.topzone.biz:3000/socketlist
-  app.get('/socketlist', function(req, res) {
-    session.socketlist(req, res, function(err, data) {
+  // ex) http://sodatransfer.com:3000/deploylist
+  app.get('/deploylist', function(req, res) {
+    session.deploylist(req, res, function(err, data) {
       return utils.res(res, data);
     });
   });

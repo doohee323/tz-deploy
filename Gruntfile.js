@@ -72,7 +72,7 @@ module.exports = function (grunt) {
       options: {
         port: 9009,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'www.topzone.biz',
+        hostname: 'sodatransfer.com',
         livereload: 35729
       },
       livereload: {
@@ -371,7 +371,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          module: 'tzSocket',
+          module: 'sdtDeploy',
           htmlmin: '<%= htmlmin.dist.options %>',
           usemin: 'scripts/scripts.js'
         },

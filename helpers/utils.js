@@ -351,15 +351,13 @@ var gf_GetSession = function(req, cb) {
 	      	cb(err, rslt);
 	      } else {
 	      	req.session.referer = session.referer;
-			    req.session.app_name = session.app_name;
+			req.session.app_name = session.app_name;
 	        req.session.user = session.user;
 	        req.session.developer = session.developer;
 	        req.session.priv_cd = session.priv_cd;
 	        req.session.priv = session.priv;
 		      req.session.admin = session.admin;
 		      req.session.developer = session.developer;
-		    	req.session.socket = session.socket;
-		    	req.session.tz_gap = session.tz_gap;
 		    	rslt.code = 0;
 		    	rslt.session = req.session;
 		    	rslt.token = token;

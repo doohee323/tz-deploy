@@ -1,20 +1,8 @@
-# Tz-Socket app
-
-run the app on vagrant
-
-```
-
-cd /vagrant/tz-socket
-
-killall node; node app.js
-
-```
+# SodaTransferDeploy app
 
 run the app on local env
 
 ```
-
-cd /Users/mac/Documents/workspace/php/tz-chat/tz-socket
 node --debug app.js
 
 open eclipse and run debug

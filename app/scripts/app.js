@@ -2,24 +2,23 @@
 
 /**
  * @ngdoc overview
- * @name tzSocket
- * @description # tzSocket
+ * @name sdtDeploy
+ * @description # sdtDeploy
  * 
  * Main module of the application.
  */
 
 var config = {
-  domain : 'http://www.topzone.biz',
-  NODE_ENV : 'development',
-  socketLogined : false
+  domain : 'http://sodatransfer.com',
+  NODE_ENV : 'development'
 };
 
-if(location.hostname === 'www.topzone.biz') {
-  config.domain = 'http://www.topzone.biz';
+if(location.hostname === 'sodatransfer.com') {
+  config.domain = 'http://sodatransfer.com';
 }
 
 angular.module(
-    'tzSocket',
+    'sdtDeploy',
     [ 'ngAnimate', 'ngCookies', 'ngMessages', 'ngResource', 'ngRoute', 'ngFileUpload',
         'ngSanitize', 'ngTouch' ]).constant('config', config).config(
     function($routeProvider) {
