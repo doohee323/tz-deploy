@@ -132,6 +132,7 @@ module.exports = function(app) {
   console.log("port: " + port)
   
   app.use(express.static('app'));
+  app.use('/download', express.static('download'));
   var server = app.listen(port, function() {
     console.log("Express server has started on port " + port)
   });

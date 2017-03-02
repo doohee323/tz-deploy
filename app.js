@@ -11,6 +11,7 @@ var winston = require('winston');
 //var prototype = require('./app/scripts/common/utils/prototype');
 var util = require('util');
 var utils = require('./helpers/utils');
+var deploy = require('./api/deploy');
 	
 /**
  * Main application entry file.
@@ -64,5 +65,12 @@ appExports.winston = winston;
 
 // Express settings
 require('./config/express')(app);
+
+var cron = require('node-cron');
+cron.schedule('* * * * *', function(){
+	 deploy.download(function() {
+	 	
+	 });
+});
 
 console.log('started!!!!');
