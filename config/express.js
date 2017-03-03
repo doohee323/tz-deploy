@@ -21,6 +21,8 @@ module.exports = function(app) {
 
   app.set('showStackError', true);
   app.use(compression());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.enable("jsonp callback");
 
   console.log('config.sessionSecret:' + config.sessionSecret);

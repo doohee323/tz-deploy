@@ -3,6 +3,7 @@
 var moment = require('moment');
 var fs = require('fs');
 var logger = require('../app.js').winston;
+var exec = require('child_process').exec;
 
 /**
 * @function 	remove element from object
@@ -397,7 +398,27 @@ var gf_Runscope = function(req, input) {
 		}
 	}
 }
-  
+
+var gf_RunCommands = function(array, callback) {
+  var index = 0;
+  var results = [];
+  function next() {
+     if (index < array.length) {
+         exec(array[index++], function(err, stdout) {
+             if (err) return callback(err);
+             // do the next iteration
+             results.push(stdout);
+             next();
+         });
+     } else {
+         // all done here
+         callback(null, results);
+     }
+  }
+  // start the first iteration
+  next();
+}
+
 exports.sortByKey = gf_SortByKey;
 exports.removeElem = gf_RemoveElem;
 exports.exportCvs = gf_ExportCvs;
@@ -417,3 +438,4 @@ exports.log = gf_Log;
 exports.getSession = gf_GetSession;
 exports.loggingFromClient = gf_LoggingFromClient;
 exports.runscope = gf_Runscope;
+exports.runCommands = gf_RunCommands;
