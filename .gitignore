@@ -6,7 +6,8 @@ app/bower_components
 *.iml
 /dist
 /logs
-/upload
+/download
+/target
 /bower_components
 *.DS_Store
 *.log
