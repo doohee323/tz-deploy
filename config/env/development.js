@@ -7,8 +7,10 @@ module.exports = {
 		domain : 'http://sodatransfer.com'
 	},
 	deploy : {
+		ciServer: "http://ci.test.com:3000/",
+		checkCnt : 10,
 		checkUrl : "http://dev2.sodatransfer.com",
-		sourceDir : "/download",
+		sourceDir : "download/",
 		targetPath : '/Users/dhong/Documents/workspace/sts-3.8.3.RELEASE/SodaTransferDeploy/target'
 	},
 	mysql : {

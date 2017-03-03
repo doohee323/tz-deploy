@@ -6,6 +6,13 @@ module.exports = {
 		port : 3000,
 		domain : 'http://sodatransfer.com'
 	},
+	deploy : {
+		ciServer: "http://ci.sodatransfer.com/",
+		checkCnt : 10,
+		checkUrl : "http://localhost:8080",
+		sourceDir : "download/",
+		targetPath : '/Users/dhong/Documents/workspace/sts-3.8.3.RELEASE/SodaTransferDeploy/target'
+	},
 	mysql : {
 		env : "production",
 		dbUsername : "root",

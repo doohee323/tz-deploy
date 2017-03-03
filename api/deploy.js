@@ -18,11 +18,13 @@ exports.deploy = function(req, res, next) {
 	var sleep = require('sleep-promise');
 
 	// 1. gets lastet.json from ci
-	var url = 'http://ci.test.com:3000/download/lastest.json';
+	var url = config.deploy.ciServer + config.deploy.sourceDir + 'lastest.json';
+	logger.info(url);
 	request(url, function(err, response, body) {
 		logger.info(err)
 		var ciJson = JSON.parse(body);
-		var localJsonPath = 'download/mine.json';
+		var localJsonPath = config.deploy.sourceDir + 'mine.json';
+		logger.info(localJsonPath);
 		async.waterfall([
 				function(callback) {
 					fs.readFile(localJsonPath, 'utf8', function(err, data) {
@@ -30,19 +32,19 @@ exports.deploy = function(req, res, next) {
 							logger.info(err)
 							throw err;
 						}
-						logger.info(data);
 						var localJson = JSON.parse(data);
 						// 2. comparing server's one with local one
 						if (ciJson.file != localJson.file || ciJson.version != localJson.version || ciJson.size == localJson.size) {
 							callback(null, localJson);
 						} else { // 2
-							callback(err, null);
+							return next(0, []);
 						}
 					});
 				},
 				function(localJson, callback) {
+					logger.info("!!!!!" + localJsonPath);
 					// 3. gets new war, if different
-					url = 'http://ci.test.com:3000/download/' + localJson.file;
+					url = config.deploy.ciServer + config.deploy.sourceDir + localJson.file;
 					request(url, function(err, response, body) {
 						if (err) {
 							callback(err, null);
@@ -70,7 +72,7 @@ exports.deploy = function(req, res, next) {
 				},
 				function(localJson, callback) {
 					// 5. set lock on repository
-					request.post('http://ci.test.com:3000/lock', {
+					request.post(config.deploy.ciServer + 'lock', {
 						form : localJson
 					}, function(err, response, body) {
 						if (err) {
@@ -84,7 +86,7 @@ exports.deploy = function(req, res, next) {
 				},
 				function(localJson, callback) {
 					// 6. deploy the lastest one
-					var cmd = '/bin/mv ' + config.rootPath + config.deploy.sourceDir + '/' + localJson.file + ' '
+					var cmd = '/bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + localJson.file + ' '
 							+ config.deploy.targetDir + '/' + localJson.file;
 					logger.info(cmd)
 					utils.runCommands([ cmd ], function(err, results) {
@@ -98,7 +100,7 @@ exports.deploy = function(req, res, next) {
 						}
 					}); // 6
 				}, function(localJson, callback) {
-					var num = Array.from(Array(10).keys());
+					var num = Array.from(Array(config.deploy.checkCnt).keys());
 					config.req_done = false;
 					Object.keys(num).forEach(function(key, i) {
 						setTimeout(function() {
@@ -115,12 +117,12 @@ exports.deploy = function(req, res, next) {
 									logger.info(err)
 								}
 								logger.info("---this.cnt:" + this.cnt);
-								if ((response && response.statusCode == 200) || this.cnt == 2) {
+								if ((response && response.statusCode == 200)) {
 									config.req_done = true;
 									callback(null, localJson);
 								}
 							});
-						}, i * 2000);
+						}, i * 10000);
 					});
 				} ], function(err, localJson) {
 			// 7. set free on repository callback(null, localJson);
@@ -132,7 +134,8 @@ exports.deploy = function(req, res, next) {
 var setFree = function(localJson, next) {
 	var logger = require('../app.js').winston;
 	var request = require('request');
-	request.post('http://ci.test.com:3000/free', {
+	var config = require('../app.js').config;
+	request.post(config.deploy.ciServer + 'free', {
 		form : localJson
 	}, function(err, response, body) {
 		if (!err && response.statusCode == 200) {
@@ -146,15 +149,13 @@ exports.lock = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var fs = require('fs');
-	logger.info("----config.rootPath:" + config.rootPath)
 
 	var localJson = req.body;
 	logger.info("req.body" + req.body)
-	var lockPath = config.rootPath + '/download/lock.json';
+	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
 	logger.info("--------------lockPath:" + lockPath)
 	logger.info("--------------localJson:" + JSON.stringify(localJson))
 	fs.writeFile(lockPath, JSON.stringify(localJson), 'utf8', function(err, data) {
-		logger.info("--------------2")
 		if (err) {
 			logger.info("write err" + err)
 			throw err;
@@ -170,7 +171,7 @@ exports.free = function(req, res, next) {
 	var fs = require('fs');
 	logger.info("----config.rootPath:" + config.rootPath)
 
-	var lockPath = config.rootPath + '/download/lock.json';
+	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
 	logger.info("--------------lockPath:" + lockPath)
 	fs.exists(lockPath, function(exists) {
 		if (exists) {
