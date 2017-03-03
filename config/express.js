@@ -107,7 +107,7 @@ module.exports = function(app) {
   }
 
   var app_dir = __dirname.substring(0, __dirname.lastIndexOf('/')) + config.app_dir;
-  app.use(favicon(app_dir + '/favicon.ico'));
+  //app.use(favicon(app_dir + '/favicon.ico'));
 
   app.use(function(err, req, res, next) {
     if (~err.message.indexOf('not found'))
