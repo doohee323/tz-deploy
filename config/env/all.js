@@ -4,34 +4,33 @@ var path = require('path');
 var rootPath = path.normalize(__dirname + '/../..');
 
 module.exports = {
-	rootPath: rootPath,
-	port: process.env.PORT || 3000,
+	rootPath : rootPath,
+	port : process.env.PORT || 3000,
 
 	// front-end application directory
-	app_dir: '/app',
+	app_dir : '/app',
 
 	// upload directory
-	upload_dir: './upload',
-	
+	upload_dir : './upload',
+
 	// logs directory
-	logs_dir: './logs',
-	
+	logs_dir : './logs',
+
 	// expressJwt secret
-	sessionSecret: 'sdt-deploy',
+	sessionSecret : 'sdt-deploy',
 
 	// The name of the MongoDB collection to store sessions in
-	sessionCollection: 'sessions'
+	sessionCollection : 'sessions'
 }
 
 process.env['appKeys'] = 'app_info';
 process.env['database'] = 'sdtDeploy';
 
 // url for password email
-if(process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
-  process.env['url'] = 'sodatransfer.com:3000';
-}
-else if(process.env['NODE_ENV'] === 'production') {
-  process.env['url'] = 'developers.gettopzone.com';
+if (process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
+	process.env['url'] = 'sodatransfer.com:3000';
+} else if (process.env['NODE_ENV'] === 'production') {
+	process.env['url'] = 'developers.gettopzone.com';
 }
 
 console.log('url:' + process.env['url']);

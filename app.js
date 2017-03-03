@@ -28,20 +28,12 @@ var config = require('./config/config');
 var auth = require('./config/authorization');
 
 console.log('process.env.NODE_ENV:' + process.env.NODE_ENV);
-process.argv.forEach(function (val, index, array) {
-  //console.log(index + ': ' + val);
-//  if(index == 2 && val.indexOf('=') > -1) {
-//  	config.app.instance_no = val.split('=')[1];
-//  }
-});
-//console.log('config.app.instance_no:' + config.app.instance_no);
-//process.env.PORT = parseInt(process.env.PORT) + parseInt(config.app.instance_no);
 console.log('process.env.PORT:' + process.env.PORT);
 
-// server crash block
-process.on('uncaughtException', function (err) {
-	console.log('Caught exception: ' + err);
-});
+//// server crash block
+//process.on('uncaughtException', function (err) {
+//	console.log('Caught exception: ' + err);
+//});
 
 fs.exists(config.logs_dir, function (exists) {
 	if(!exists) {
@@ -68,9 +60,9 @@ require('./config/express')(app);
 
 var cron = require('node-cron');
 cron.schedule('* * * * *', function(){
-	 deploy.download(function() {
-	 	
-	 });
+//	 deploy.download(function() {
+//	 	
+//	 });
 });
 
 console.log('started!!!!');
