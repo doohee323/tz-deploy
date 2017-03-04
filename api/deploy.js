@@ -176,7 +176,7 @@ exports.deploy = function(req, res, cb) {
 									}
 								}
 							});
-						}, i * 10000);
+						}, i * 20000);
 					});
 				}, function(ciJson, callback) {
 					// 5. set local version and size with lastest one
