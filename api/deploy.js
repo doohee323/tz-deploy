@@ -187,6 +187,7 @@ exports.deploy = function(req, res, cb) {
 					});
 				}, function(ciJson, callback) {
 					// 5. set local version and size with lastest one
+					logger.debug("write mineJsonPath: " + mineJsonPath);
 					fs.writeFile(mineJsonPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
 						if (err) {
 							logger.error(err)
@@ -196,13 +197,13 @@ exports.deploy = function(req, res, cb) {
 					});
 				} ], function(err, ciJson) {
 
-			var cmd = 'sudo systemctl restart tomcat';
+			var cmd = config.deploy['appName'].postCmd;
 			logger.info(cmd)
 			utils.runCommands([ cmd ], function(err, results) {
 				logger.debug("==========err: " + err);
 				logger.debug("==========results: " + results);
 				if (err) {
-					logger.error("fail: sudo systemctl restart tomcat")
+					logger.error("fail: " + config.deploy['appName'].postCmd)
 				}
 				// 7. set free on repository callback(null, ciJson);
 				return setFree(ciJson, appName, next);

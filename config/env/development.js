@@ -14,17 +14,20 @@ module.exports = {
 		sodatransfer: {
 			checkUrl : "http://dev2.sodatransfer.com:8080/transfer/sodatransferInfo?=",
 			targetDir : '/Users/dhong/Documents/workspace/sts-3.8.3.RELEASE/SodaTransferDeploy/target',
-			targetFile : 'ROOT.war'
+			targetFile : 'ROOT.war',
+			postCmd: 'sudo systemctl stop tomcat; sudo systemctl start tomcat'
 		},
 		sodatransferboot: {
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
-			targetFile : 'ROOT.jar'
+			targetFile : 'ROOT.jar',
+			postCmd: 'sudo systemctl stop sodatransfer; sudo systemctl start sodatransfer'
 		},
 		sodatransferui: {
 			checkUrl : "http://localhost/transfer/sodatransferInfo?=",
 			targetDir : '/home/ubuntu',
-			targetFile : 'ROOT.jar'
+			targetFile : 'ROOT.jar',
+			postCmd: '#sync'
 		}
 	},
 	mysql : {
