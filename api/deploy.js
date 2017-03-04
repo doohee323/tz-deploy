@@ -125,16 +125,6 @@ exports.deploy = function(req, res, cb) {
 					});
 				},
 				function(ciJson, callback) {
-					// 5. set local version and size with lastest one
-					fs.writeFile(mineJsonPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
-						if (err) {
-							logger.info(err)
-							callback(err, null);
-						}
-						callback(null, ciJson);
-					});
-				},
-				function(mineJson, callback) {
 					// 6. deploy the lastest one
 					var cmd = 'sudo /bin/rm -rf ' + config.deploy.targetDir + '/' + config.deploy.targetFile;
 					logger.info(cmd)
@@ -144,22 +134,22 @@ exports.deploy = function(req, res, cb) {
 						if (err) {
 							logger.info("fail: 6. deploy the lastest one")
 						}
-						cmd = 'sudo /bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + mineJson.file + ' '
+						cmd = 'sudo /bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file + ' '
 								+ config.deploy.targetDir + '/' + config.deploy.targetFile;
 						logger.info(cmd)
 						utils.runCommands([ cmd ], function(err, results) {
 							logger.info("==========err: " + err);
 							logger.info("==========results: " + results);
 							if (!err) {
-								callback(null, mineJson);
+								callback(null, ciJson);
 							} else {
 								logger.info("fail: 6. deploy the lastest one")
-								// 7. set free on repository callback(null, mineJson);
-								return setFree(mineJson, next);
+								// 7. set free on repository callback(null, ciJson);
+								return setFree(ciJson, next);
 							}
 						}); // 6
 					}); // 6
-				}, function(mineJson, callback) {
+				}, function(ciJson, callback) {
 					var num = Array.from(Array(config.deploy.checkCnt).keys());
 					config.req_done = false;
 					Object.keys(num).forEach(function(key, i) {
@@ -182,13 +172,22 @@ exports.deploy = function(req, res, cb) {
 									logger.info("---response.statusCode: " + response.statusCode);
 									if (response.statusCode == 200) {
 										config.req_done = true;
-										callback(null, mineJson);
+										callback(null, ciJson);
 									}
 								}
 							});
 						}, i * 10000);
 					});
-				} ], function(err, mineJson) {
+				}, function(ciJson, callback) {
+					// 5. set local version and size with lastest one
+					fs.writeFile(mineJsonPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
+						if (err) {
+							logger.info(err)
+							callback(err, null);
+						}
+						callback(null, ciJson);
+					});
+				} ], function(err, ciJson) {
 
 			var cmd = 'sudo systemctl restart tomcat';
 			logger.info(cmd)
@@ -198,19 +197,19 @@ exports.deploy = function(req, res, cb) {
 				if (err) {
 					logger.info("fail: sudo systemctl restart tomcat")
 				}
-				// 7. set free on repository callback(null, mineJson);
-				return setFree(mineJson, next);
+				// 7. set free on repository callback(null, ciJson);
+				return setFree(ciJson, next);
 			});
 		})
 	})
 };
 
-var setFree = function(mineJson, next) {
+var setFree = function(ciJson, next) {
 	var logger = require('../app.js').winston;
 	var request = require('request');
 	var config = require('../app.js').config;
 	request.post(config.deploy.ciServer + 'free', {
-		form : mineJson
+		form : ciJson
 	}, function(err, response, body) {
 		if (!err && response.statusCode == 200) {
 			logger.info(body)
@@ -224,12 +223,12 @@ exports.lock = function(req, res, next) {
 	var config = require('../app.js').config;
 	var fs = require('fs');
 
-	var mineJson = req.body;
+	var ciJson = req.body;
 	logger.info("req.body" + req.body)
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
 	logger.info("--------------lockPath:" + lockPath)
-	logger.info("--------------mineJson:" + JSON.stringify(mineJson))
-	fs.writeFile(lockPath, JSON.stringify(mineJson), 'utf8', function(err, data) {
+	logger.info("--------------ciJson:" + JSON.stringify(ciJson))
+	fs.writeFile(lockPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
 		if (err) {
 			logger.info("write err" + err)
 			throw err;

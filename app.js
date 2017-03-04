@@ -68,6 +68,17 @@ process.argv.forEach(function(val, index, array) {
 console.log('config.app.type: ' + config.app.type);
 
 if (config.app.type == 'client') {
+	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
+	var cmd = 'sudo /bin/rm -rf ' + lockPath;
+	logger.info(cmd)
+	utils.runCommands([ cmd ], function(err, results) {
+		logger.info("==========err: " + err);
+		logger.info("==========results: " + results);
+		if (err) {
+			logger.info("fail: 6. deploy the lastest one")
+		}
+	});
+
 	var cron = require('node-cron');
 	cron.schedule('* * * * *', function() {
 		deploy.deploy(function() {
