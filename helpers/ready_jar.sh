@@ -4,6 +4,7 @@ export PJT_DIR=/mnt/SodaTransferDeploy
 
 path=`ls $2/target/*.war`
 echo $path
+mkdir -p $PJT_DIR/download
 cp $path $PJT_DIR/download
 chmod o+rw $PJT_DIR/download/*
 file=$(basename $path)
