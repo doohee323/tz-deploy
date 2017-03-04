@@ -8,7 +8,7 @@ module.exports = {
 		domain : 'http://sodatransfer.com'
 	},
 	deploy : {
-		ciServer: "http://localhost:3000/",
+		ciServer: "http://ci.sodatransfer.com:3000/",
 		checkCnt : 10,
 		checkUrl : "http://localhost:8080",
 		sourceDir : "download/",
