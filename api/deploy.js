@@ -7,7 +7,8 @@
 /**
  */
 exports.deploy = function(req, res, cb) {
-
+	
+	var appName = req.params.appName
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
@@ -27,7 +28,7 @@ exports.deploy = function(req, res, cb) {
 	}
 
 	// 1. gets lastet.json from ci
-	var url = config.deploy.ciServer + config.deploy.sourceDir + 'lastest.json';
+	var url = config.deploy.ciServer + config.deploy.sourceDir + appName + '_lastest.json';
 	logger.info(url);
 	request(url, function(err, response, body) {
 		logger.info(err)
@@ -36,7 +37,7 @@ exports.deploy = function(req, res, cb) {
 			return next(0, []);
 		}
 		var ciJson = JSON.parse(body);
-		var mineJsonPath = config.deploy.sourceDir + 'mine.json';
+		var mineJsonPath = config.deploy.sourceDir + appName + '_mine.json';
 		logger.info(mineJsonPath);
 		async.waterfall([
 				function(callback) {
@@ -85,7 +86,7 @@ exports.deploy = function(req, res, cb) {
 				},
 				function(ciJson, callback) {
 					// 5. check if it can deploy now or not
-					var url = config.deploy.ciServer + config.deploy.sourceDir + 'lock.json';
+					var url = config.deploy.ciServer + config.deploy.sourceDir + appName + '_lock.json';
 					logger.info(url);
 					var options = {
 						url : url,
@@ -106,7 +107,7 @@ exports.deploy = function(req, res, cb) {
 								});
 								logger.info(adresses)
 								ciJson.ipaddress = adresses;
-								request.post(config.deploy.ciServer + 'lock', {
+								request.post(config.deploy.ciServer + 'lock/' + appName, {
 									form : ciJson
 								}, function(err, response, body) {
 									if (err) {
@@ -208,7 +209,7 @@ var setFree = function(ciJson, next) {
 	var logger = require('../app.js').winston;
 	var request = require('request');
 	var config = require('../app.js').config;
-	request.post(config.deploy.ciServer + 'free', {
+	request.post(config.deploy.ciServer + 'free/' + appName, {
 		form : ciJson
 	}, function(err, response, body) {
 		if (!err && response.statusCode == 200) {
@@ -225,7 +226,7 @@ exports.lock = function(req, res, next) {
 
 	var ciJson = req.body;
 	logger.info("req.body" + req.body)
-	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
+	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
 	logger.info("--------------lockPath:" + lockPath)
 	logger.info("--------------ciJson:" + JSON.stringify(ciJson))
 	fs.writeFile(lockPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
@@ -244,7 +245,7 @@ exports.free = function(req, res, next) {
 	var fs = require('fs');
 	logger.info("----config.rootPath:" + config.rootPath)
 
-	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
+	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
 	logger.info("--------------lockPath:" + lockPath)
 	fs.exists(lockPath, function(exists) {
 		if (exists) {

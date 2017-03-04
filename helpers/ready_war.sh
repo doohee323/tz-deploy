@@ -2,7 +2,7 @@
 
 export PJT_DIR=/mnt/SodaTransferDeploy
 
-path=`ls $1/target/*.war`
+path=`ls $2/target/*.war`
 echo $path
 cp $path $PJT_DIR/download
 chmod o+rw $PJT_DIR/download/*
@@ -16,6 +16,6 @@ version=${version//.war/}
 
 json='{"file": "'$file'", "version": "'$version'"}'
 echo $json
-echo $json > $PJT_DIR/download/lastest.json
+echo $json > $PJT_DIR/download/$1_lastest.json
 
 exit 0

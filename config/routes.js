@@ -15,28 +15,28 @@ module.exports = function(app, fs) {
 	});
 
 	// ex) http://ci.sodatransfer.com:3000/deploy
-	app.get('/deploy', function(req, res) {
+	app.get('/deploy/:appName', function(req, res) {
 		deploy.deploy(req, res, function(err, data) {
 			return utils.res(res, data);
 		});
 	});
 
 	// ex) http://ci.sodatransfer.com:3000/lock
-	app.post('/lock', function(req, res) {
+	app.post('/lock/:appName', function(req, res) {
 		deploy.lock(req, res, function(err, data) {
 			return utils.res(res, data);
 		});
 	});
 
 	// ex) http://ci.sodatransfer.com:3000/free
-	app.post('/free', function(req, res) {
+	app.post('/free/:appName', function(req, res) {
 		deploy.free(req, res, function(err, data) {
 			return utils.res(res, data);
 		});
 	});
 
 	// ex) http://ci.sodatransfer.com:3000/deploylist
-	app.get('/deploylist', function(req, res) {
+	app.get('/deploylist/:appName', function(req, res) {
 		deploy.deploylist(req, res, function(err, data) {
 			return utils.res(res, data);
 		});
