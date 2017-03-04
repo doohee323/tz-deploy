@@ -20,7 +20,7 @@ var deploy = require('./api/deploy');
 
 // Load configurations
 // Set the node enviornment variable if not set before
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 process.env.PORT = process.env.PORT || 3000;
 
 // Initializing system variables 
