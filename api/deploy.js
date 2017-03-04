@@ -21,7 +21,8 @@ exports.deploy = function(req, res, cb) {
 	var next = cb;
 	if (!next) {
 		var next = function(err, data) {
-			return utils.res(res, data);
+			logger.info("close batch!");
+			return;
 		}
 	}
 
