@@ -88,22 +88,41 @@ exports.deploy = function(req, res, cb) {
 					}); // 4
 				},
 				function(mineJson, callback) {
-					// 5. set lock on repository
-					request.post(config.deploy.ciServer + 'lock', {
-						form : mineJson
-					}, function(err, response, body) {
+					// 5. check if it can deploy now or not
+					var url = config.deploy.ciServer + config.deploy.sourceDir + 'lock.json';
+					logger.info(url);
+					var options = {
+						url : url,
+						method : 'GET'
+					};
+					request(options, function(err, response, body) {
 						if (err) {
 							logger.info(err)
-							callback(err, null);
-						} else {
-							logger.info(body)
-							callback(null, mineJson);
 						}
-					}); // 5
+						if (response) {
+							logger.info("---response.statusCode: " + response.statusCode);
+							if (response.statusCode == 404) {
+								// 5. set lock on repository
+								request.post(config.deploy.ciServer + 'lock', {
+									form : mineJson
+								}, function(err, response, body) {
+									if (err) {
+										logger.info(err)
+										callback(err, null);
+									} else {
+										logger.info(body)
+										callback(null, mineJson);
+									}
+								}); // 5
+							} else {
+								logger.info("can't lock now: " + body);
+								return next(0, []);
+							}
+						}
+					});
 				},
 				function(mineJson, callback) {
 					// 6. deploy the lastest one
-
 					var cmd = 'sudo /bin/rm -rf ' + config.deploy.targetDir + '/' + config.deploy.targetFile;
 					logger.info(cmd)
 					utils.runCommands([ cmd ], function(err, results) {
