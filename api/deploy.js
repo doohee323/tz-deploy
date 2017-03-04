@@ -86,19 +86,28 @@ exports.deploy = function(req, res, next) {
 				},
 				function(localJson, callback) {
 					// 6. deploy the lastest one
-					var cmd = '/bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + localJson.file + ' '
-							+ config.deploy.targetDir + '/' + localJson.file;
-					logger.info(cmd)
-					utils.runCommands([ cmd ], function(err, results) {
-						if (!results) {
-							logger.info(results);
-							callback(null, localJson);
+					fs.exists(config.deploy.targetDir + '/' + config.deploy.targetFile, function(exists) {
+						if (exists) {
+							fs.unlink(config.deploy.targetDir + '/' + config.deploy.targetFile);
+							logger.info('delete file!: ' + config.deploy.targetDir + '/' + config.deploy.targetFile);
+							var cmd = '/bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + localJson.file + ' '
+									+ config.deploy.targetDir + '/' + config.deploy.targetFile;
+							logger.info(cmd)
+							utils.runCommands([ cmd ], function(err, results) {
+								if (!results) {
+									logger.info(results);
+									callback(null, localJson);
+								} else {
+									logger.info("fail: 6. deploy the lastest one")
+									// 7. set free on repository callback(null, localJson);
+									return setFree(localJson, next);
+								}
+							}); // 6
 						} else {
-							logger.info("fail: 6. deploy the lastest one")
-							// 7. set free on repository callback(null, localJson);
+							logger.info('File not found, so not deleting.');
 							return setFree(localJson, next);
 						}
-					}); // 6
+					});
 				}, function(localJson, callback) {
 					var num = Array.from(Array(config.deploy.checkCnt).keys());
 					config.req_done = false;

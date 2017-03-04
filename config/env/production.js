@@ -11,7 +11,8 @@ module.exports = {
 		checkCnt : 10,
 		checkUrl : "http://localhost:8080",
 		sourceDir : "download/",
-		targetDir : '/home/ubuntu'
+		targetDir : '/home/ubuntu',
+		targetFile : 'ROOT.war'
 	},
 	mysql : {
 		env : "production",

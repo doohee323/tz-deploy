@@ -11,7 +11,8 @@ module.exports = {
 		checkCnt : 10,
 		checkUrl : "http://dev2.sodatransfer.com",
 		sourceDir : "download/",
-		targetDir : '/Users/dhong/Documents/workspace/sts-3.8.3.RELEASE/SodaTransferDeploy/target'
+		targetDir : '/Users/dhong/Documents/workspace/sts-3.8.3.RELEASE/SodaTransferDeploy/target',
+		targetFile : 'ROOT.war'
 	},
 	mysql : {
 		env : "local",
