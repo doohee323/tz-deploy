@@ -16,6 +16,7 @@ exports.deploy = function(req, res, next) {
 	var ifaces = require('os').networkInterfaces();
 	var async = require('async');
 	var sleep = require('sleep-promise');
+	var download = require('download-file')
 
 	// 1. gets lastet.json from ci
 	var url = config.deploy.ciServer + config.deploy.sourceDir + 'lastest.json';
@@ -46,20 +47,17 @@ exports.deploy = function(req, res, next) {
 					// 3. gets new war, if different
 					url = config.deploy.ciServer + config.deploy.sourceDir + localJson.file;
 					logger.info("downloading url: " + url);
-					request(url, function(err, response, body) {
-						if (err) {
-							callback(err, null);
-						}
-						var sourcePath = config.rootPath + '/' + config.deploy.sourceDir + localJson.file;
-						fs.writeFile(sourcePath, body, 'utf8', function(err, data) {
-							logger.info("writing downloaed file");
+					var options = {
+					    directory: config.rootPath + '/' + config.deploy.sourceDir,
+					    filename: localJson.file
+					}
+					download(url, options, function(err){
 							if (err) {
 								logger.info(err)
 								callback(err, null);
 							}
 							callback(null, localJson);
-						});
-					}) // 3
+					}) 
 				},
 				function(localJson, callback) {
 					// 4. set local version and size with lastest one
