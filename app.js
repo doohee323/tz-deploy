@@ -70,12 +70,12 @@ console.log('config.app.type: ' + config.app.type);
 if (config.app.type == 'client') {
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
 	var cmd = 'sudo /bin/rm -rf ' + lockPath;
-	logger.info(cmd)
+	console.log(cmd)
 	utils.runCommands([ cmd ], function(err, results) {
-		logger.info("==========err: " + err);
-		logger.info("==========results: " + results);
+		console.log("==========err: " + err);
+		console.log("==========results: " + results);
 		if (err) {
-			logger.info("fail: 6. deploy the lastest one")
+			console.log("fail: 6. deploy the lastest one")
 		}
 	});
 
