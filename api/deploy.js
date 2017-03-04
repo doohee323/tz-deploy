@@ -42,7 +42,7 @@ exports.deploy = function(req, res, next) {
 					});
 				},
 				function(localJson, callback) {
-					logger.info("!!!!!" + localJsonPath);
+					logger.info("!!!!!localJsonPath: " + localJsonPath);
 					// 3. gets new war, if different
 					url = config.deploy.ciServer + config.deploy.sourceDir + localJson.file;
 					request(url, function(err, response, body) {
@@ -104,7 +104,7 @@ exports.deploy = function(req, res, next) {
 								}
 							}); // 6
 						} else {
-							logger.info('File not found, so not deleting.');
+							logger.info('File not found, so not deleting.:' + config.deploy.targetDir + '/' + config.deploy.targetFile);
 							return setFree(localJson, next);
 						}
 					});
