@@ -68,6 +68,13 @@ process.argv.forEach(function(val, index, array) {
 console.log('config.app.type: ' + config.app.type);
 
 if (config.app.type == 'client') {
+	var cron = require('node-cron');
+	cron.schedule('* * * * *', function() {
+		deploy.deploy(function() {
+			console.log('deploy~~~!!!!');
+		});
+	});
+} else {
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
 	var cmd = 'sudo /bin/rm -rf ' + lockPath;
 	console.log(cmd)
@@ -79,12 +86,6 @@ if (config.app.type == 'client') {
 		}
 	});
 
-	var cron = require('node-cron');
-	cron.schedule('* * * * *', function() {
-		deploy.deploy(function() {
-			console.log('deploy~~~!!!!');
-		});
-	});
 }
 
 console.log('started!!!!');
