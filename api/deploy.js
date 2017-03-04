@@ -124,6 +124,7 @@ exports.deploy = function(req, res, next) {
 							if (config.req_done) {
 								return;
 							}
+							logger.info("cheking service:" + config.deploy.checkUrl);
 							var options = {
 								url : config.deploy.checkUrl,
 								method : 'GET',
@@ -133,10 +134,13 @@ exports.deploy = function(req, res, next) {
 								if (err) {
 									logger.info(err)
 								}
-								logger.info("---this.cnt:" + this.cnt);
-								if ((response && response.statusCode == 200)) {
-									config.req_done = true;
-									callback(null, localJson);
+								logger.info("---this.cnt: " + this.cnt);
+								if (response) {
+									logger.info("---response.statusCode: " + response.statusCode);
+									if (response.statusCode == 200) {
+										config.req_done = true;
+										callback(null, localJson);
+									}
 								}
 							});
 						}, i * 10000);
