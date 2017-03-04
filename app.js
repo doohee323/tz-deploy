@@ -8,7 +8,6 @@ var http = require('http');
 var path = require('path');
 var fs = require('fs');
 var winston = require('winston');
-// var prototype = require('./app/scripts/common/utils/prototype');
 var util = require('util');
 var utils = require('./helpers/utils');
 var deploy = require('./api/deploy');
@@ -62,6 +61,8 @@ process.argv.forEach(function(val, index, array) {
 	if (index == 2) {
 		if (val == 'server') {
 			config.app.type = 'server';
+		} else {
+			config.app.appName = val;
 		}
 	}
 });

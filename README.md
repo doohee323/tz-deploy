@@ -5,7 +5,8 @@
 - run server
 	/mnt/SodaTransferDeploy$ node app.js server &
 - run client
-	/mnt/SodaTransferDeploy$ node app.js &
+	/mnt/SodaTransferDeploy$ node app.js ${appName} &
+	ex) node app.js sodatransfer &
 - kill node
 	/mnt/SodaTransferDeploy$ killall node
 
