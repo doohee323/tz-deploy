@@ -53,8 +53,9 @@ exports.deploy = function(req, res, next) {
 					}
 					download(url, options, function(err) {
 						if (err) {
-							logger.info(err)
-							callback(err, null);
+							logger.info(err);
+							logger.info("Not found: " + url);
+							return next(0, []);
 						}
 						callback(null, localJson);
 					})
