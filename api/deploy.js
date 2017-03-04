@@ -6,8 +6,8 @@
 
 /**
  */
-exports.deploy = function(req, res, next) {
-
+exports.deploy = function(req, res, cb) {
+	
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
@@ -16,7 +16,14 @@ exports.deploy = function(req, res, next) {
 	var ifaces = require('os').networkInterfaces();
 	var async = require('async');
 	var sleep = require('sleep-promise');
-	var download = require('download-file')
+	var download = require('download-file');
+	
+	var next = cb;
+	if(!next) {
+		var next = function(err, data) {
+			return utils.res(res, data);
+		}
+	}
 
 	// 1. gets lastet.json from ci
 	var url = config.deploy.ciServer + config.deploy.sourceDir + 'lastest.json';
