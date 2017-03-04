@@ -7,11 +7,11 @@ module.exports = {
 		domain : 'http://sodatransfer.com'
 	},
 	deploy : {
-		ciServer: "http://ci.sodatransfer.com/",
+		ciServer: "http://localhost:3000/",
 		checkCnt : 10,
 		checkUrl : "http://localhost:8080",
 		sourceDir : "download/",
-		targetPath : '/Users/dhong/Documents/workspace/sts-3.8.3.RELEASE/SodaTransferDeploy/target'
+		targetPath : '/home/ubuntu'
 	},
 	mysql : {
 		env : "production",

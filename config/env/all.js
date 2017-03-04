@@ -28,9 +28,9 @@ process.env['database'] = 'sdtDeploy';
 
 // url for password email
 if (process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
-	process.env['url'] = 'sodatransfer.com:3000';
+	process.env['url'] = 'ci.test.com:3000';
 } else if (process.env['NODE_ENV'] === 'production') {
-	process.env['url'] = 'developers.gettopzone.com';
+	process.env['url'] = 'ci.sodatransfer.com:3000';
 }
 
 console.log('url:' + process.env['url']);
