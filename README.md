@@ -1,6 +1,6 @@
 # SodaTransferDeploy app
 
-run the app on local env
+1. run the app on local env
 
 ```
 npm install devtool -g
@@ -9,7 +9,19 @@ devtool app.js --index index.html --watch
 
 ```
 
-Workflow for deploy
+2. set jenkins's Execute Shell
+
+```
+
+bash /mnt/SodaTransferDeploy/helpers/ready_war.sh ${WORKSPACE}
+
+or
+
+bash /mnt/SodaTransferDeploy/helpers/ready_jar.sh ${WORKSPACE}
+
+```
+
+* Workflow for deploy
 ```
 [for consumer] check lastest with polling
 1. gets lastet.json from ci

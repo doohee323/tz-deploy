@@ -2,7 +2,6 @@
 
 export PJT_DIR=/mnt/SodaTransferDeploy
 
-#path=`ls ${WORKSPACE}/target/*.war`
 path=`ls $1/target/*.war`
 echo $path
 cp $path $PJT_DIR/download
