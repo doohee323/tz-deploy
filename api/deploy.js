@@ -37,6 +37,7 @@ exports.deploy = function(req, res, cb) {
 		logger.info(mineJsonPath);
 		async.waterfall([
 				function(callback) {
+					logger.info("--------------mineJsonPath:" + mineJsonPath)
 					fs.readFile(mineJsonPath, 'utf8', function(err, data) {
 						if (err) {
 							logger.info(err)
