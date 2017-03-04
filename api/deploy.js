@@ -50,7 +50,15 @@ exports.deploy = function(req, res, next) {
 						if (err) {
 							callback(err, null);
 						}
-						callback(null, localJson);
+						var sourcePath = config.rootPath + '/' + config.deploy.sourceDir + localJson.file;
+						fs.writeFile(sourcePath, body, 'utf8', function(err, data) {
+							logger.info("writing downloaed file");
+							if (err) {
+								logger.info(err)
+								callback(err, null);
+							}
+							callback(null, localJson);
+						});
 					}) // 3
 				},
 				function(localJson, callback) {
