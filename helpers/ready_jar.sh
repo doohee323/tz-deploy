@@ -2,7 +2,7 @@
 
 export PJT_DIR=/mnt/SodaTransferDeploy
 
-path=`ls $2/target/*.war`
+path=`ls $2/target/*.jar`
 echo $path
 mkdir -p $PJT_DIR/download
 cp $path $PJT_DIR/download
@@ -13,7 +13,7 @@ pos=`expr index "$file" -`
 len=${#file}
 let len=len-pos
 version=${file:$pos:$len}
-version=${version//.war/}
+version=${version//.jar/}
 
 json='{"file": "'$file'", "version": "'$version'"}'
 echo $json
