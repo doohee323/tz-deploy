@@ -5,7 +5,6 @@ var rootPath = path.normalize(__dirname + '/../..');
 
 module.exports = {
 	rootPath : rootPath,
-	port : process.env.PORT || 3000,
 
 	// front-end application directory
 	app_dir : '/app',

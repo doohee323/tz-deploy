@@ -130,7 +130,7 @@ module.exports = function(app) {
   app.engine('html', require('ejs').renderFile);
 
   // Start the app by listening on <port>
-  var port = process.env.PORT || config.port;
+  var port = config.app.port || process.env.PORT;
   console.log("port: " + port)
   
   app.use(express.static('app'));

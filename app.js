@@ -57,9 +57,8 @@ process.argv.forEach(function(val, index, array) {
 			config.app.appName = val;
 		}
 	}
-	
 	if (index == 3) {
-		config.app.port = val;
+		config.app.port = parseInt(val);
 	}
 });
 console.log('config.app.type: ' + config.app.type);
