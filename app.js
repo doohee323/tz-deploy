@@ -49,14 +49,6 @@ winston.add(winston.transports.DailyRotateFile, {
 	datePattern : 'yyyy-MM-dd.log'
 });
 
-var appExports = module.exports = {};
-appExports.config = config;
-appExports.utils = utils;
-appExports.winston = winston;
-
-// Express settings
-require('./config/express')(app);
-
 process.argv.forEach(function(val, index, array) {
 	if (index == 2) {
 		if (val == 'server') {
@@ -71,6 +63,14 @@ process.argv.forEach(function(val, index, array) {
 	}
 });
 console.log('config.app.type: ' + config.app.type);
+
+var appExports = module.exports = {};
+appExports.config = config;
+appExports.utils = utils;
+appExports.winston = winston;
+
+// Express settings
+require('./config/express')(app);
 
 if (config.app.type == 'client') {
 	var cron = require('node-cron');
