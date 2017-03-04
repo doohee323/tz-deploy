@@ -2,6 +2,7 @@
 
 module.exports = {
 	app : {
+		type : "client",
 		name : "sdt-deploy - Production",
 		port : 3000,
 		domain : 'http://sodatransfer.com'
