@@ -2,10 +2,7 @@
 
 export PJT_DIR=/mnt/SodaTransferDeploy
 
-echo $1
-echo $2
-
-path=`ls $2/target/*.jar`
+path=`ls $2/target/*.jar | grep -v with-dependencies.jar`
 echo $path
 mkdir -p $PJT_DIR/download
 cp $path $PJT_DIR/download
