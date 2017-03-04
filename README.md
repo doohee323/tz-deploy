@@ -1,16 +1,21 @@
 # SodaTransferDeploy app
 
 1. run the app on local env
-
 ```
-npm install devtool -g
+- run server
+	/mnt/SodaTransferDeploy$ node app.js server &
+- run client
+	/mnt/SodaTransferDeploy$ node app.js &
+- kill node
+	/mnt/SodaTransferDeploy$ killall node
 
-devtool app.js --index index.html --watch
+- debug on local
+	npm install devtool -g
+	devtool app.js --index index.html --watch
 
 ```
 
 2. set jenkins's Execute Shell
-
 ```
 
 bash /mnt/SodaTransferDeploy/helpers/ready_war.sh ${WORKSPACE}
