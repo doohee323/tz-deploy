@@ -50,8 +50,8 @@ exports.deploy = function(req, res, cb) {
 					logger.info("--------------mineJsonPath:" + mineJsonPath)
 					fs.readFile(mineJsonPath, 'utf8', function(err, data) {
 						if (err) {
-							logger.info(err)
-							throw err;
+							logger.info(err);
+							data = '{}';
 						}
 						logger.info("--------------mineJson:" + mineJson)
 						var mineJson = JSON.parse(data);
