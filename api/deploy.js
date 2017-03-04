@@ -45,6 +45,7 @@ exports.deploy = function(req, res, next) {
 					logger.info("!!!!!localJsonPath: " + localJsonPath);
 					// 3. gets new war, if different
 					url = config.deploy.ciServer + config.deploy.sourceDir + localJson.file;
+					logger.info("downloading url: " + url);
 					request(url, function(err, response, body) {
 						if (err) {
 							callback(err, null);
@@ -94,8 +95,8 @@ exports.deploy = function(req, res, next) {
 									+ config.deploy.targetDir + '/' + config.deploy.targetFile;
 							logger.info(cmd)
 							utils.runCommands([ cmd ], function(err, results) {
+								logger.info("==========results: " + results);
 								if (!results) {
-									logger.info(results);
 									callback(null, localJson);
 								} else {
 									logger.info("fail: 6. deploy the lastest one")
