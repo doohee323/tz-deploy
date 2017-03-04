@@ -42,6 +42,7 @@ exports.deploy = function(req, res, cb) {
 							logger.info(err)
 							throw err;
 						}
+						logger.info("--------------mineJson:" + mineJson)
 						var mineJson = JSON.parse(data);
 						// 2. comparing server's one with local one
 						if (ciJson.file != mineJson.file || ciJson.version != mineJson.version || ciJson.size != mineJson.size) {
