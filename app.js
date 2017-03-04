@@ -76,7 +76,7 @@ if (config.app.type == 'client') {
 		});
 	});
 } else {
-	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + 'lock.json';
+	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + '*_lock.json';
 	var cmd = 'sudo /bin/rm -rf ' + lockPath;
 	console.log(cmd)
 	utils.runCommands([ cmd ], function(err, results) {
