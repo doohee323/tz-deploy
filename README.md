@@ -13,17 +13,23 @@
 - debug on local
 	npm install devtool -g
 	devtool app.js --index index.html --watch
+	
+	with appName parameter
+	devtool app.js sodatransfer --index index.html --watch
 
 ```
 
 2. set jenkins's Execute Shell
 ```
+bash /mnt/SodaTransferDeploy/helpers/ready_war.sh sodatransfer ${WORKSPACE}
 
-bash /mnt/SodaTransferDeploy/helpers/ready_war.sh ${WORKSPACE}
+or 
+
+bash /mnt/SodaTransferDeploy/helpers/ready_war.sh sodatransferboot ${WORKSPACE}
 
 or
 
-bash /mnt/SodaTransferDeploy/helpers/ready_jar.sh ${WORKSPACE}
+bash /mnt/SodaTransferDeploy/helpers/ready_jar.sh sodatransfer ${WORKSPACE}
 
 ```
 

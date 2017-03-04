@@ -8,13 +8,6 @@
  */
 exports.deploy = function(req, res, cb) {
 	
-	var appName;
-	if(req && req.params) {
-		appName = req.params.appName;
-	} else {
-		appName = config.app.appName;
-	}
-	
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
@@ -25,6 +18,13 @@ exports.deploy = function(req, res, cb) {
 	var sleep = require('sleep-promise');
 	var download = require('download-file');
 
+	var appName;
+	if(req && req.params) {
+		appName = req.params.appName;
+	} else {
+		appName = config.app.appName;
+	}
+	
 	var next = cb;
 	if (!next) {
 		var next = function(err, data) {
