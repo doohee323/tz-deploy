@@ -189,8 +189,18 @@ exports.deploy = function(req, res, cb) {
 						}, i * 10000);
 					});
 				} ], function(err, mineJson) {
-			// 7. set free on repository callback(null, mineJson);
-			return setFree(mineJson, next);
+
+			var cmd = 'sudo systemctl restart tomcat';
+			logger.info(cmd)
+			utils.runCommands([ cmd ], function(err, results) {
+				logger.info("==========err: " + err);
+				logger.info("==========results: " + results);
+				if (err) {
+					logger.info("fail: sudo systemctl restart tomcat")
+				}
+				// 7. set free on repository callback(null, mineJson);
+				return setFree(mineJson, next);
+			});
 		})
 	})
 };
