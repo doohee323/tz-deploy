@@ -56,14 +56,14 @@ exports.deploy = function(req, res, cb) {
 						}
 					});
 				},
-				function(mineJson, callback) {
+				function(ciJson, callback) {
 					logger.info("!!!!!mineJsonPath: " + mineJsonPath);
 					// 3. gets new war, if different
-					url = config.deploy.ciServer + config.deploy.sourceDir + mineJson.file;
+					url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
 					logger.info("downloading url: " + url + ' to ' + config.deploy.targetFile);
 					var options = {
 						directory : config.rootPath + '/' + config.deploy.sourceDir,
-						filename : config.deploy.targetFile
+						filename : ciJson.file
 					}
 					download(url, options, function(err) {
 						if (err) {
@@ -71,28 +71,10 @@ exports.deploy = function(req, res, cb) {
 							logger.info("Not found: " + url);
 							return next(0, []);
 						}
-						callback(null, mineJson);
+						callback(null, ciJson);
 					})
 				},
-				function(mineJson, callback) {
-					// 4. set local version and size with lastest one
-					var adresses = Object.keys(ifaces).reduce(function(result, dev) {
-						return result.concat(ifaces[dev].reduce(function(result, details) {
-							return result.concat(details.family === 'IPv4' && !details.internal ? [ details.address ] : []);
-						}, []));
-					});
-					logger.info(adresses)
-					mineJson = ciJson;
-					mineJson.ipaddress = adresses;
-					fs.writeFile(mineJsonPath, JSON.stringify(mineJson), 'utf8', function(err, data) {
-						if (err) {
-							logger.info(err)
-							callback(err, null);
-						}
-						callback(null, mineJson);
-					}); // 4
-				},
-				function(mineJson, callback) {
+				function(ciJson, callback) {
 					// 5. check if it can deploy now or not
 					var url = config.deploy.ciServer + config.deploy.sourceDir + 'lock.json';
 					logger.info(url);
@@ -107,23 +89,40 @@ exports.deploy = function(req, res, cb) {
 						if (response) {
 							logger.info("---response.statusCode: " + response.statusCode);
 							if (response.statusCode == 404) {
-								// 5. set lock on repository
+								// 4. set lock on repository
+								var adresses = Object.keys(ifaces).reduce(function(result, dev) {
+									return result.concat(ifaces[dev].reduce(function(result, details) {
+										return result.concat(details.family === 'IPv4' && !details.internal ? [ details.address ] : []);
+									}, []));
+								});
+								logger.info(adresses)
+								ciJson.ipaddress = adresses;
 								request.post(config.deploy.ciServer + 'lock', {
-									form : mineJson
+									form : ciJson
 								}, function(err, response, body) {
 									if (err) {
 										logger.info(err)
 										callback(err, null);
 									} else {
 										logger.info(body)
-										callback(null, mineJson);
+										callback(null, ciJson);
 									}
-								}); // 5
+								});
 							} else {
 								logger.info("can't lock now: " + body);
 								return next(0, []);
 							}
 						}
+					});
+				},
+				function(ciJson, callback) {
+					// 5. set local version and size with lastest one
+					fs.writeFile(mineJsonPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
+						if (err) {
+							logger.info(err)
+							callback(err, null);
+						}
+						callback(null, ciJson);
 					});
 				},
 				function(mineJson, callback) {
