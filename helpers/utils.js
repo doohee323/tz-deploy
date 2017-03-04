@@ -246,22 +246,22 @@ var gf_Request = function(req) {
 	if(!config.logging.input) return;
 	var logger = require('../app.js').winston;
 	var time = '[' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
-	logger.info(time + '[' + req.url + ']' + '=============');
+	logger.debug(time + '[' + req.url + ']' + '=============');
 	var input;
 	input = req.query;
 	if(input && Object.keys(input).length > 0) {
 		input = JSON.stringify(input);
-		logger.info(time + '- input params' + time + JSON.stringify(input));
+		logger.debug(time + '- input params' + time + JSON.stringify(input));
 	}
 	input = req.params;
 	if(input && Object.keys(input).length > 0) {
 		input = JSON.stringify(input);
-		logger.info(time + '- input params:' + time + JSON.stringify(input));
+		logger.debug(time + '- input params:' + time + JSON.stringify(input));
 	}
 	input = req.body;
 	if(input && Object.keys(input).length > 0) {
 		input = JSON.stringify(input);
-		logger.info(time + '- input params:' + time + JSON.stringify(input));
+		logger.debug(time + '- input params:' + time + JSON.stringify(input));
 	}
 	gf_Runscope(req, input);
 	return input;
@@ -280,16 +280,16 @@ var gf_Response = function(res, rslt, errCode) {
 		if(rslt2 && Object.keys(rslt2).length > 0) {
 		  for (var j = 0; j < Object.keys(rslt2).length; j++) {
 		  	if(typeof rslt2[Object.keys(rslt2)[j]] == 'object' && rslt2[Object.keys(rslt2)[j]] != null && rslt2[Object.keys(rslt2)[j]].length > 2) { // array
-					logger.info(time + '- return values was truncated for short logging!: ' + rslt2[Object.keys(rslt2)[j]].length);
+					logger.debug(time + '- return values was truncated for short logging!: ' + rslt2[Object.keys(rslt2)[j]].length);
 		  		rslt2[Object.keys(rslt2)[j]] = rslt2[Object.keys(rslt2)[j]][0];
 		  	}
 		  };
-			logger.info(time + '- return values:' + JSON.stringify(rslt2));
+			logger.debug(time + '- return values:' + JSON.stringify(rslt2));
 		}
 	} else {
-		logger.info(time + '- return values:' + JSON.stringify(rslt));
+		logger.debug(time + '- return values:' + JSON.stringify(rslt));
 	}
-	logger.info(time + '[end]========================================================================================');
+	logger.debug(time + '[end]========================================================================================');
 	if(errCode) {
 		res.json(rslt, errCode);
 	} else {
@@ -302,14 +302,14 @@ var gf_LoggingFromClient = function(req) {
 	if(!config.logging.client) return;
 	var time = '[client][' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
 	var logger = require('../app.js').winston;
-	logger.info(time + '[begin]========================================================================================');
-	logger.info(time + ' title: ' + req.body.title);
+	logger.debug(time + '[begin]========================================================================================');
+	logger.debug(time + ' title: ' + req.body.title);
 	var arry = req.body.stack.split('\n');
 	for(var i=0;i<arry.length;i++) {
-		logger.info(time + '	' + arry[i]);
+		logger.debug(time + '	' + arry[i]);
 	}
-	logger.info(time + ' user:' + req.body.user.full_name + '(' + req.body.user.user_email + ')' );
-	logger.info(time + '[end]========================================================================================');
+	logger.debug(time + ' user:' + req.body.user.full_name + '(' + req.body.user.user_email + ')' );
+	logger.debug(time + '[end]========================================================================================');
 };
   
 var gf_Log = function(level, rslt) {
@@ -317,7 +317,7 @@ var gf_Log = function(level, rslt) {
 	if(!config.logging[level]) return;
 	var time = '[' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
 	var logger = require('../app.js').winston;
-	logger.info(time + JSON.stringify(rslt));
+	logger.debug(time + JSON.stringify(rslt));
 };
   
 var gf_GetSession = function(req, cb) {

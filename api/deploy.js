@@ -28,33 +28,33 @@ exports.deploy = function(req, res, cb) {
 	var next = cb;
 	if (!next) {
 		var next = function(err, data) {
-			logger.info("close batch!");
+			logger.debug("close batch!");
 			return;
 		}
 	}
 
 	// 1. gets lastet.json from ci
 	var url = config.deploy.ciServer + config.deploy.sourceDir + appName + '_lastest.json';
-	logger.info(url);
+	logger.debug(url);
 	request(url, function(err, response, body) {
-		logger.info(err)
-		logger.info("--------------ciJson:" + body);
+		logger.debug(err)
+		logger.debug("--------------ciJson:" + body);
 		if (response.statusCode != 200) {
 			return next(0, []);
 		}
 		var ciJson = JSON.parse(body);
 		var mineJsonPath = config.deploy.sourceDir + appName + '_mine.json';
-		logger.info(mineJsonPath);
+		logger.debug(mineJsonPath);
 		async.waterfall([
 				function(callback) {
-					logger.info("--------------mineJsonPath:" + mineJsonPath)
+					logger.debug("--------------mineJsonPath:" + mineJsonPath)
 					fs.readFile(mineJsonPath, 'utf8', function(err, data) {
 						if (err) {
-							logger.info(err);
+							logger.error(err);
 							data = '{}';
 						}
 						var mineJson = JSON.parse(data);
-						logger.info("--------------mineJson:" + mineJson)
+						logger.debug("--------------mineJson:" + mineJson)
 						// 2. comparing server's one with local one
 						if (ciJson.file != mineJson.file || ciJson.version != mineJson.version || ciJson.size != mineJson.size) {
 							callback(null, ciJson);
@@ -65,14 +65,14 @@ exports.deploy = function(req, res, cb) {
 				},
 				function(ciJson, callback) {
 					var cmd = 'sudo /bin/rm -rf ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file;
-					logger.info(cmd)
+					logger.debug(cmd)
 					utils.runCommands([ cmd ], function(err, results) {
-						logger.info("==========err: " + err);
-						logger.info("==========results: " + results);
+						logger.debug("==========err: " + err);
+						logger.debug("==========results: " + results);
 						if (err) {
-							logger.info("fail: 6. deploy the lastest one")
+							logger.error("fail: 6. deploy the lastest one")
 						}
-						logger.info("!!!!!mineJsonPath: " + mineJsonPath);
+						logger.debug("!!!!!mineJsonPath: " + mineJsonPath);
 						// 3. gets new war, if different
 						url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
 						logger.info("downloading url: " + url + ' to ' + config.deploy[appName].targetFile);
@@ -82,8 +82,8 @@ exports.deploy = function(req, res, cb) {
 						}
 						download(url, options, function(err) {
 							if (err) {
-								logger.info(err);
-								logger.info("Not found: " + url);
+								logger.error(err);
+								logger.error("Not found: " + url);
 								return next(0, []);
 							}
 							callback(null, ciJson);
@@ -93,17 +93,17 @@ exports.deploy = function(req, res, cb) {
 				function(ciJson, callback) {
 					// 5. check if it can deploy now or not
 					var url = config.deploy.ciServer + config.deploy.sourceDir + appName + '_lock.json';
-					logger.info(url);
+					logger.debug(url);
 					var options = {
 						url : url,
 						method : 'GET'
 					};
 					request(options, function(err, response, body) {
 						if (err) {
-							logger.info(err)
+							logger.error(err)
 						}
 						if (response) {
-							logger.info("---response.statusCode: " + response.statusCode);
+							logger.debug("---response.statusCode: " + response.statusCode);
 							if (response.statusCode == 404) {
 								// 4. set lock on repository
 								var adresses = Object.keys(ifaces).reduce(function(result, dev) {
@@ -111,16 +111,16 @@ exports.deploy = function(req, res, cb) {
 										return result.concat(details.family === 'IPv4' && !details.internal ? [ details.address ] : []);
 									}, []));
 								});
-								logger.info(adresses)
+								logger.debug(adresses)
 								ciJson.ipaddress = adresses;
 								request.post(config.deploy.ciServer + 'lock/' + appName, {
 									form : ciJson
 								}, function(err, response, body) {
 									if (err) {
-										logger.info(err)
+										logger.error(err)
 										callback(err, null);
 									} else {
-										logger.info(body)
+										logger.debug(body)
 										callback(null, ciJson);
 									}
 								});
@@ -134,23 +134,23 @@ exports.deploy = function(req, res, cb) {
 				function(ciJson, callback) {
 					// 6. deploy the lastest one
 					var cmd = 'sudo /bin/rm -rf ' + config.deploy[appName].targetDir + '/' + config.deploy[appName].targetFile;
-					logger.info(cmd)
+					logger.debug(cmd)
 					utils.runCommands([ cmd ], function(err, results) {
-						logger.info("==========err: " + err);
-						logger.info("==========results: " + results);
+						logger.debug("==========err: " + err);
+						logger.debug("==========results: " + results);
 						if (err) {
-							logger.info("fail: 6. deploy the lastest one")
+							logger.error("fail: 6. deploy the lastest one")
 						}
 						cmd = 'sudo /bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file + ' '
 								+ config.deploy[appName].targetDir + '/' + config.deploy[appName].targetFile;
-						logger.info(cmd)
+						logger.debug(cmd)
 						utils.runCommands([ cmd ], function(err, results) {
-							logger.info("==========err: " + err);
-							logger.info("==========results: " + results);
+							logger.debug("==========err: " + err);
+							logger.debug("==========results: " + results);
 							if (!err) {
 								callback(null, ciJson);
 							} else {
-								logger.info("fail: 6. deploy the lastest one")
+								logger.error("fail: 6. deploy the lastest one")
 								// 7. set free on repository callback(null, ciJson);
 								return setFree(ciJson, appName, next);
 							}
@@ -172,11 +172,11 @@ exports.deploy = function(req, res, cb) {
 							};
 							request(options, function(err, response, body) {
 								if (err) {
-									logger.info(err)
+									logger.error(err)
 								}
-								logger.info("---this.cnt: " + this.cnt);
+								logger.debug("---this.cnt: " + this.cnt);
 								if (response) {
-									logger.info("---response.statusCode: " + response.statusCode);
+									logger.debug("---response.statusCode: " + response.statusCode);
 									if (response.statusCode == 200) {
 										config.req_done = true;
 										callback(null, ciJson);
@@ -189,7 +189,7 @@ exports.deploy = function(req, res, cb) {
 					// 5. set local version and size with lastest one
 					fs.writeFile(mineJsonPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
 						if (err) {
-							logger.info(err)
+							logger.error(err)
 							callback(err, null);
 						}
 						callback(null, ciJson);
@@ -199,10 +199,10 @@ exports.deploy = function(req, res, cb) {
 			var cmd = 'sudo systemctl restart tomcat';
 			logger.info(cmd)
 			utils.runCommands([ cmd ], function(err, results) {
-				logger.info("==========err: " + err);
-				logger.info("==========results: " + results);
+				logger.debug("==========err: " + err);
+				logger.debug("==========results: " + results);
 				if (err) {
-					logger.info("fail: sudo systemctl restart tomcat")
+					logger.error("fail: sudo systemctl restart tomcat")
 				}
 				// 7. set free on repository callback(null, ciJson);
 				return setFree(ciJson, appName, next);
@@ -219,7 +219,7 @@ var setFree = function(ciJson, appName, next) {
 		form : ciJson
 	}, function(err, response, body) {
 		if (!err && response.statusCode == 200) {
-			logger.info(body)
+			logger.debug(body)
 		}
 		return next(0, []);
 	});
@@ -232,16 +232,16 @@ exports.lock = function(req, res, next) {
 	
 	var appName = appName = req.params.appName;
 	var ciJson = req.body;
-	logger.info("req.body" + req.body)
+	logger.debug("req.body" + req.body)
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
-	logger.info("--------------lockPath:" + lockPath)
-	logger.info("--------------ciJson:" + JSON.stringify(ciJson))
+	logger.debug("--------------lockPath:" + lockPath)
+	logger.debug("--------------ciJson:" + JSON.stringify(ciJson))
 	fs.writeFile(lockPath, JSON.stringify(ciJson), 'utf8', function(err, data) {
 		if (err) {
-			logger.info("write err" + err)
-			throw err;
+			logger.error("write err" + err)
+		} else {
+			logger.info('locked!!!!!')
 		}
-		logger.info('locked!!!!!')
 	});
 	return next(0, []);
 };
@@ -250,17 +250,17 @@ exports.free = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var fs = require('fs');
-	logger.info("----config.rootPath:" + config.rootPath)
+	logger.debug("----config.rootPath:" + config.rootPath)
 
 	var appName = appName = req.params.appName;
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
-	logger.info("--------------lockPath:" + lockPath)
+	logger.debug("--------------lockPath:" + lockPath)
 	fs.exists(lockPath, function(exists) {
 		if (exists) {
 			fs.unlink(lockPath);
 			logger.info('free!!!!!')
 		} else {
-			logger.info('File not found, so not deleting.');
+			logger.error('File not found, so not deleting.');
 		}
 	});
 	return next(0, []);
