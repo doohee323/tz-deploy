@@ -32,7 +32,7 @@ exports.deploy = function(req, res, cb) {
 	request(url, function(err, response, body) {
 		logger.info(err)
 		logger.info("--------------ciJson:" + body);
-		if(!body) {
+		if (!body) {
 			return next(0, []);
 		}
 		var ciJson = JSON.parse(body);
@@ -57,21 +57,30 @@ exports.deploy = function(req, res, cb) {
 					});
 				},
 				function(ciJson, callback) {
-					logger.info("!!!!!mineJsonPath: " + mineJsonPath);
-					// 3. gets new war, if different
-					url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
-					logger.info("downloading url: " + url + ' to ' + config.deploy.targetFile);
-					var options = {
-						directory : config.rootPath + '/' + config.deploy.sourceDir,
-						filename : ciJson.file
-					}
-					download(url, options, function(err) {
+					var cmd = 'sudo /bin/rm -rf ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file;
+					logger.info(cmd)
+					utils.runCommands([ cmd ], function(err, results) {
+						logger.info("==========err: " + err);
+						logger.info("==========results: " + results);
 						if (err) {
-							logger.info(err);
-							logger.info("Not found: " + url);
-							return next(0, []);
+							logger.info("fail: 6. deploy the lastest one")
 						}
-						callback(null, ciJson);
+						logger.info("!!!!!mineJsonPath: " + mineJsonPath);
+						// 3. gets new war, if different
+						url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
+						logger.info("downloading url: " + url + ' to ' + config.deploy.targetFile);
+						var options = {
+							directory : config.rootPath + '/' + config.deploy.sourceDir,
+							filename : ciJson.file
+						}
+						download(url, options, function(err) {
+							if (err) {
+								logger.info(err);
+								logger.info("Not found: " + url);
+								return next(0, []);
+							}
+							callback(null, ciJson);
+						})
 					})
 				},
 				function(ciJson, callback) {
