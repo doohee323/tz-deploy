@@ -105,8 +105,9 @@ exports.deploy = function(req, res, next) {
 								+ config.deploy.targetDir + '/' + config.deploy.targetFile;
 						logger.info(cmd)
 						utils.runCommands([ cmd ], function(err, results) {
+							logger.info("==========err: " + err);
 							logger.info("==========results: " + results);
-							if (!results) {
+							if (!err) {
 								callback(null, localJson);
 							} else {
 								logger.info("fail: 6. deploy the lastest one")
