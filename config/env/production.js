@@ -10,7 +10,7 @@ module.exports = {
 	deploy : {
 		ciServer: "http://ci.sodatransfer.com:3000/",
 		checkCnt : 10,
-		checkUrl : "http://localhost:8080",
+		checkUrl : "http://localhost:8080/transfer/sodatransferInfo?=",
 		sourceDir : "download/",
 		targetDir : '/opt/tomcat/webapps',
 		targetFile : 'ROOT.war'
