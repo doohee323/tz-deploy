@@ -75,7 +75,7 @@ exports.deploy = function(req, res, cb) {
 						logger.info("!!!!!mineJsonPath: " + mineJsonPath);
 						// 3. gets new war, if different
 						url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
-						logger.info("downloading url: " + url + ' to ' + config.deploy.targetFile);
+						logger.info("downloading url: " + url + ' to ' + config.deploy[appName].targetFile);
 						var options = {
 							directory : config.rootPath + '/' + config.deploy.sourceDir,
 							filename : ciJson.file
@@ -133,7 +133,7 @@ exports.deploy = function(req, res, cb) {
 				},
 				function(ciJson, callback) {
 					// 6. deploy the lastest one
-					var cmd = 'sudo /bin/rm -rf ' + config.deploy.targetDir + '/' + config.deploy.targetFile;
+					var cmd = 'sudo /bin/rm -rf ' + config.deploy[appName].targetDir + '/' + config.deploy[appName].targetFile;
 					logger.info(cmd)
 					utils.runCommands([ cmd ], function(err, results) {
 						logger.info("==========err: " + err);
@@ -142,7 +142,7 @@ exports.deploy = function(req, res, cb) {
 							logger.info("fail: 6. deploy the lastest one")
 						}
 						cmd = 'sudo /bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file + ' '
-								+ config.deploy.targetDir + '/' + config.deploy.targetFile;
+								+ config.deploy[appName].targetDir + '/' + config.deploy[appName].targetFile;
 						logger.info(cmd)
 						utils.runCommands([ cmd ], function(err, results) {
 							logger.info("==========err: " + err);
@@ -164,9 +164,9 @@ exports.deploy = function(req, res, cb) {
 							if (config.req_done) {
 								return;
 							}
-							logger.info("cheking service:" + config.deploy.checkUrl);
+							logger.info("cheking service:" + config.deploy[appName].checkUrl);
 							var options = {
-								url : config.deploy.checkUrl,
+								url : config.deploy[appName].checkUrl,
 								method : 'GET',
 								cnt : num[key]
 							};

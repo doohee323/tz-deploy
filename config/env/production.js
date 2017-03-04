@@ -10,10 +10,22 @@ module.exports = {
 	deploy : {
 		ciServer: "http://ci.sodatransfer.com:3000/",
 		checkCnt : 10,
-		checkUrl : "http://localhost:8080/transfer/sodatransferInfo?=",
 		sourceDir : "download/",
-		targetDir : '/opt/tomcat/webapps',
-		targetFile : 'ROOT.war'
+		sodatransfer: {
+			checkUrl : "http://localhost:8080/transfer/sodatransferInfo?=",
+			targetDir : '/opt/tomcat/webapps',
+			targetFile : 'ROOT.war'
+		},
+		sodatransferboot: {
+			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
+			targetDir : '/home/ubuntu',
+			targetFile : 'ROOT.jar'
+		},
+		sodatransferui: {
+			checkUrl : "http://localhost/transfer/sodatransferInfo?=",
+			targetDir : '/home/ubuntu',
+			targetFile : 'ROOT.jar'
+		}
 	},
 	mysql : {
 		env : "production",
