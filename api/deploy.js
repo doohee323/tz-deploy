@@ -94,15 +94,16 @@ exports.deploy = function(req, res, next) {
 				},
 				function(localJson, callback) {
 					// 6. deploy the lastest one
-					fs.exists(config.deploy.targetDir + '/' + config.deploy.targetFile, function(exists) {
-						if (!exists) {
-							logger.info('File not found, so not deleting.:' + config.deploy.targetDir + '/'
-									+ config.deploy.targetFile);
-						} else {
-							fs.unlink(config.deploy.targetDir + '/' + config.deploy.targetFile);
-							logger.info('delete file!: ' + config.deploy.targetDir + '/' + config.deploy.targetFile);
+
+					var cmd = 'sudo /bin/rm -rf ' + config.deploy.targetDir + '/' + config.deploy.targetFile;
+					logger.info(cmd)
+					utils.runCommands([ cmd ], function(err, results) {
+						logger.info("==========err: " + err);
+						logger.info("==========results: " + results);
+						if (err) {
+							logger.info("fail: 6. deploy the lastest one")
 						}
-						var cmd = '/bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + localJson.file + ' '
+						cmd = 'sudo /bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + localJson.file + ' '
 								+ config.deploy.targetDir + '/' + config.deploy.targetFile;
 						logger.info(cmd)
 						utils.runCommands([ cmd ], function(err, results) {
@@ -116,7 +117,7 @@ exports.deploy = function(req, res, next) {
 								return setFree(localJson, next);
 							}
 						}); // 6
-					});
+					}); // 6
 				}, function(localJson, callback) {
 					var num = Array.from(Array(config.deploy.checkCnt).keys());
 					config.req_done = false;
