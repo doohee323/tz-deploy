@@ -46,18 +46,18 @@ exports.deploy = function(req, res, next) {
 					logger.info("!!!!!localJsonPath: " + localJsonPath);
 					// 3. gets new war, if different
 					url = config.deploy.ciServer + config.deploy.sourceDir + localJson.file;
-					logger.info("downloading url: " + url);
+					logger.info("downloading url: " + url + ' to ' + config.deploy.targetFile);
 					var options = {
-					    directory: config.rootPath + '/' + config.deploy.sourceDir,
-					    filename: localJson.file
+						directory : config.rootPath + '/' + config.deploy.sourceDir,
+						filename : config.deploy.targetFile
 					}
-					download(url, options, function(err){
-							if (err) {
-								logger.info(err)
-								callback(err, null);
-							}
-							callback(null, localJson);
-					}) 
+					download(url, options, function(err) {
+						if (err) {
+							logger.info(err)
+							callback(err, null);
+						}
+						callback(null, localJson);
+					})
 				},
 				function(localJson, callback) {
 					// 4. set local version and size with lastest one
@@ -111,7 +111,8 @@ exports.deploy = function(req, res, next) {
 								}
 							}); // 6
 						} else {
-							logger.info('File not found, so not deleting.:' + config.deploy.targetDir + '/' + config.deploy.targetFile);
+							logger.info('File not found, so not deleting.:' + config.deploy.targetDir + '/'
+									+ config.deploy.targetFile);
 							return setFree(localJson, next);
 						}
 					});
