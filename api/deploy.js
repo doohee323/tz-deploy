@@ -252,6 +252,7 @@ exports.free = function(req, res, next) {
 	var fs = require('fs');
 	logger.info("----config.rootPath:" + config.rootPath)
 
+	var appName = appName = req.params.appName;
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
 	logger.info("--------------lockPath:" + lockPath)
 	fs.exists(lockPath, function(exists) {
