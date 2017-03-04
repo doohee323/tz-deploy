@@ -152,7 +152,7 @@ exports.deploy = function(req, res, cb) {
 							} else {
 								logger.info("fail: 6. deploy the lastest one")
 								// 7. set free on repository callback(null, ciJson);
-								return setFree(ciJson, next);
+								return setFree(ciJson, appName, next);
 							}
 						}); // 6
 					}); // 6
@@ -205,13 +205,13 @@ exports.deploy = function(req, res, cb) {
 					logger.info("fail: sudo systemctl restart tomcat")
 				}
 				// 7. set free on repository callback(null, ciJson);
-				return setFree(ciJson, next);
+				return setFree(ciJson, appName, next);
 			});
 		})
 	})
 };
 
-var setFree = function(ciJson, next) {
+var setFree = function(ciJson, appName, next) {
 	var logger = require('../app.js').winston;
 	var request = require('request');
 	var config = require('../app.js').config;
@@ -229,7 +229,8 @@ exports.lock = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var fs = require('fs');
-
+	
+	var appName = appName = req.params.appName;
 	var ciJson = req.body;
 	logger.info("req.body" + req.body)
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
