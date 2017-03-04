@@ -31,7 +31,10 @@ exports.deploy = function(req, res, cb) {
 	logger.info(url);
 	request(url, function(err, response, body) {
 		logger.info(err)
-		logger.info("--------------ciJson:" + body)
+		logger.info("--------------ciJson:" + body);
+		if(!body) {
+			return next(0, []);
+		}
 		var ciJson = JSON.parse(body);
 		var mineJsonPath = config.deploy.sourceDir + 'mine.json';
 		logger.info(mineJsonPath);
