@@ -7,6 +7,10 @@
 - run client
 	/mnt/SodaTransferDeploy$ node app.js ${appName} &
 	ex) node app.js sodatransfer &
+	
+	- run multiple app on a host with a different port
+	node app.js sodatransferboot 3030 &
+	
 - kill node
 	/mnt/SodaTransferDeploy$ killall node
 
