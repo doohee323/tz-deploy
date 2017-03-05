@@ -164,17 +164,19 @@ exports.deploy = function(req, res, cb) {
 							if (config.req_done) {
 								return;
 							}
-							logger.info("cheking service:" + config.deploy[appName].checkUrl);
-							var options = {
-								url : config.deploy[appName].checkUrl,
-								method : 'GET',
-								cnt : num[key]
-							};
-							request(options, function(err, response, body) {
-								if (err) {
-									logger.error(err)
-								}
-								if (this.cnt > 3) {
+							var cnt = num[key];
+							if (cnt > 3) {
+								cnt = cnt - 3;
+								logger.info("cheking service:" + config.deploy[appName].checkUrl);
+								var options = {
+									url : config.deploy[appName].checkUrl,
+									method : 'GET',
+									cnt : cnt
+								};
+								request(options, function(err, response, body) {
+									if (err) {
+										logger.error(err)
+									}
 									logger.debug("---this.cnt: " + this.cnt);
 									if (response) {
 										logger.debug("---response.statusCode: " + response.statusCode);
@@ -184,8 +186,8 @@ exports.deploy = function(req, res, cb) {
 											callback(null, ciJson);
 										}
 									}
-								}
-							});
+								});
+							}
 						}, i * 20000);
 					});
 				}, function(ciJson, callback) {
