@@ -12,18 +12,21 @@ module.exports = {
 		checkCnt : 10,
 		sourceDir : "download/",
 		sodatransfer: {
+			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/transfer/sodatransferInfo?=",
 			targetDir : '/opt/tomcat/webapps',
 			targetFile : 'ROOT.war',
 			postCmd: 'sudo systemctl stop tomcat; sudo systemctl start tomcat'
 		},
 		sodatransferboot: {
+			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
 			postCmd: 'sudo systemctl stop sodatransfer; sudo systemctl start sodatransfer'
 		},
 		sodatransferui: {
+			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost/transfer/sodatransferInfo?=",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
