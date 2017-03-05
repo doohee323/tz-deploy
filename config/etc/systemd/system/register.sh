@@ -5,7 +5,7 @@ export SERVICE=$1
 echo $SERVICE
 
 sudo apt-get install systemd-services -y
-sudo cp -vp ~/SodaTransferDeploy/config/etc/systemd/system/$SERVICE.service /etc/systemd/system/$SERVICE.service
+sudo cp -vp $SERVICE.service /etc/systemd/system/$SERVICE.service
 sudo chmod 664 /etc/systemd/system/$SERVICE.service
 
 sudo systemctl daemon-reload
