@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 export SERVICE=$1
-# SERVICE=$SERVICE
+# SERVICE=sdtdc_boot
+# SERVICE=sdtds
 echo $SERVICE
 
 sudo apt-get install systemd-services -y
@@ -10,8 +11,6 @@ sudo chmod 664 /etc/systemd/system/$SERVICE.service
 
 sudo systemctl daemon-reload
 sudo systemctl enable $SERVICE
-sudo systemctl status $SERVICE.service
-
 sudo systemctl status $SERVICE
 
 #sudo systemctl restart $SERVICE

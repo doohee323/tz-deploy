@@ -1,11 +1,11 @@
 [Unit]
-Description=SodatTransferDeploy
+Description=SodatTransferDeploy Client
 After=network.target
 
 [Service]
 Type=simple
 PIDFile=/home/ubuntu/SodaTransferDeploy/download/SodatTransferDeploy.pid
-ExecStart=/usr/bin/node app.js sodatransferboot
+ExecStart=/usr/bin/node /home/ubuntu/SodaTransferDeplo/app.js sodatransferboot
 ExecStop=/bin/killall node
 
 Restart=on-failure
