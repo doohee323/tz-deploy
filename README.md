@@ -4,12 +4,18 @@
 ```
 - run server
 	/mnt/SodaTransferDeploy$ node app.js server &
+	- make server service
+	/mnt/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtds
+	
 - run client
 	/mnt/SodaTransferDeploy$ node app.js ${appName} &
 	ex) node app.js sodatransfer &
 	
 	- run multiple app on a host with a different port
 	node app.js sodatransferboot 3030 &
+	
+	- make server service
+	/mnt/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtdc_boot
 	
 - kill node
 	/mnt/SodaTransferDeploy$ killall node

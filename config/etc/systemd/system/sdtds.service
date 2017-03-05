@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-PIDFile=/mnt/SodaTransferDeploy/download/SodatTransferDeploy.pid
+PIDFile=/mnt/SodaTransferDeploy/download/sdtds.pid
 ExecStart=/usr/bin/node /mnt/SodaTransferDeploy/app.js server
 ExecStop=/bin/killall node
 

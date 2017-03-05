@@ -1,0 +1,15 @@
+[Unit]
+Description=SodatTransferDeploy Client
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/home/ubuntu/SodaTransferDeploy/download/sdtdc_tomcat.pid
+ExecStart=/usr/bin/node /home/ubuntu/SodaTransferDeplo/app.js sodatransfer
+ExecStop=/bin/kill -9 `ps -ef | grep sodatransfer | grep -v grep | awk '{print $2}'`
+
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target

@@ -11,10 +11,12 @@ sudo chmod 664 /etc/systemd/system/$SERVICE.service
 
 sudo systemctl daemon-reload
 sudo systemctl enable $SERVICE
+sudo systemctl start $SERVICE
 sudo systemctl status $SERVICE
 
-#sudo systemctl restart $SERVICE
-#sudo systemctl stop $SERVICE
-#sudo systemctl start $SERVICE
+#sudo systemctl restart sdtds
+#sudo systemctl stop sdtds
+#sudo systemctl start sdtds
+#sudo systemctl status sdtds
 
 exit 0
