@@ -42,4 +42,16 @@ module.exports = function(app, fs) {
 		});
 	});
 
+	app.get('/reboot', function(req, res) {
+		deploy.deploylist(req, res, function(err, data) {
+			return utils.res(res, data);
+		});
+	});
+
+	app.get('/upgrade', function(req, res) {
+		deploy.deploylist(req, res, function(err, data) {
+			return utils.res(res, data);
+		});
+	});
+
 }
