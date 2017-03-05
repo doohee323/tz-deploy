@@ -177,6 +177,7 @@ exports.deploy = function(req, res, cb) {
 								logger.debug("---this.cnt: " + this.cnt);
 								if (response) {
 									logger.debug("---response.statusCode: " + response.statusCode);
+									logger.debug("---body: " + body);
 									if (response.statusCode == 200) {
 										config.req_done = true;
 										callback(null, ciJson);
