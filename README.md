@@ -8,6 +8,11 @@
 	- make server service
 	/mnt/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtds
 	
+	#sudo systemctl restart sdtds
+	#sudo systemctl stop sdtds
+	#sudo systemctl start sdtds
+	#sudo systemctl status sdtds
+	
 	- logs
 		cd /mnt/SodaTransferDeploy/logs
 	
@@ -20,6 +25,11 @@
 	
 	- make server service
 	/home/ubuntu/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtdc_boot
+	
+	#sudo systemctl restart sdtdc_boot
+	#sudo systemctl stop sdtdc_boot
+	#sudo systemctl start sdtdc_boot
+	#sudo systemctl status sdtdc_boot
 	
 	- logs
 		cd  ~/SodaTransferDeploy/logs
