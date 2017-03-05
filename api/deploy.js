@@ -7,7 +7,7 @@
 /**
  */
 exports.deploy = function(req, res, cb) {
-	
+
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
@@ -19,12 +19,12 @@ exports.deploy = function(req, res, cb) {
 	var download = require('download-file');
 
 	var appName;
-	if(req && req.params) {
+	if (req && req.params) {
 		appName = req.params.appName;
 	} else {
 		appName = config.app.appName;
 	}
-	
+
 	var next = cb;
 	if (!next) {
 		var next = function(err, data) {
@@ -174,13 +174,15 @@ exports.deploy = function(req, res, cb) {
 								if (err) {
 									logger.error(err)
 								}
-								logger.debug("---this.cnt: " + this.cnt);
-								if (response) {
-									logger.debug("---response.statusCode: " + response.statusCode);
-									logger.debug("---body: " + body);
-									if (response.statusCode == 200) {
-										config.req_done = true;
-										callback(null, ciJson);
+								if (this.cnt > 3) {
+									logger.debug("---this.cnt: " + this.cnt);
+									if (response) {
+										logger.debug("---response.statusCode: " + response.statusCode);
+										logger.debug("---body: " + body);
+										if (response.statusCode == 200) {
+											config.req_done = true;
+											callback(null, ciJson);
+										}
 									}
 								}
 							});
@@ -231,7 +233,7 @@ exports.lock = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var fs = require('fs');
-	
+
 	var appName = appName = req.params.appName;
 	var ciJson = req.body;
 	logger.debug("req.body" + req.body)
