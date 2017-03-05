@@ -4,8 +4,12 @@
 ```
 - run server
 	/mnt/SodaTransferDeploy$ node app.js server &
+	
 	- make server service
 	/mnt/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtds
+	
+	- logs
+		cd /mnt/SodaTransferDeploy/logs
 	
 - run client
 	/mnt/SodaTransferDeploy$ node app.js ${appName} &
@@ -15,7 +19,10 @@
 	node app.js sodatransferboot 3030 &
 	
 	- make server service
-	/mnt/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtdc_boot
+	/home/ubuntu/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtdc_boot
+	
+	- logs
+		cd  ~/SodaTransferDeploy/logs
 	
 - kill node
 	/mnt/SodaTransferDeploy$ killall node
