@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 PIDFile=/home/ubuntu/SodaTransferDeploy/download/sdtdc_tomcat.pid
-ExecStart=/usr/bin/node /home/ubuntu/SodaTransferDeplo/app.js sodatransfer
+ExecStart=cd /home/ubuntu/SodaTransferDeploy; /usr/bin/node /home/ubuntu/SodaTransferDeploy/app.js sodatransfer
 ExecStop=/bin/kill -9 `ps -ef | grep sodatransfer | grep -v grep | awk '{print $2}'`
 
 Restart=on-failure
