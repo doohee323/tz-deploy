@@ -5,7 +5,8 @@ After=network.target
 [Service]
 Type=simple
 PIDFile=/home/ubuntu/SodaTransferDeploy/download/sdtdc_boot.pid
-ExecStart=cd /home/ubuntu/SodaTransferDeploy; /usr/bin/node /home/ubuntu/SodaTransferDeploy/app.js sodatransferboot
+WorkingDirectory=/home/ubuntu/SodaTransferDeploy
+ExecStart=/usr/bin/node /home/ubuntu/SodaTransferDeploy/app.js sodatransferboot
 ExecStop=/bin/kill -9 `ps -ef | grep sodatransferboot | grep -v grep | awk '{print $2}'`
 
 Restart=on-failure
