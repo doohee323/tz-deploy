@@ -1,0 +1,15 @@
+[Unit]
+Description=SodatTransferDeploy
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/home/ubuntu/SodaTransferDeploy/download/SodatTransferDeploy.pid
+ExecStart=/usr/bin/node app.js sodatransferboot
+ExecStop=/bin/killall node
+
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target

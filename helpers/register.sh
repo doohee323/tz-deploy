@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+export SERVICE=$1
+# SERVICE=$SERVICE
+echo $SERVICE
+
+sudo apt-get install systemd-services -y
+sudo cp -vp ~/SodaTransferDeploy/config/etc/systemd/system/$SERVICE.service /etc/systemd/system/$SERVICE.service
+sudo chmod 664 /etc/systemd/system/$SERVICE.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable $SERVICE
+sudo systemctl status $SERVICE.service
+
+sudo systemctl status $SERVICE
+
+#sudo systemctl restart $SERVICE
+#sudo systemctl stop $SERVICE
+#sudo systemctl start $SERVICE
+
+exit 0
