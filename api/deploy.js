@@ -64,34 +64,7 @@ exports.deploy = function(req, res, cb) {
 					});
 				},
 				function(ciJson, callback) {
-					var cmd = 'sudo /bin/rm -rf ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file;
-					logger.debug(cmd)
-					utils.runCommands([ cmd ], function(err, results) {
-						logger.debug("==========err: " + err);
-						logger.debug("==========results: " + results);
-						if (err) {
-							logger.error("fail: 6. deploy the lastest one")
-						}
-						logger.debug("!!!!!mineJsonPath: " + mineJsonPath);
-						// 3. gets new war, if different
-						url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
-						logger.info("downloading url: " + url + ' to ' + config.deploy[appName].targetFile);
-						var options = {
-							directory : config.rootPath + '/' + config.deploy.sourceDir,
-							filename : ciJson.file
-						}
-						download(url, options, function(err) {
-							if (err) {
-								logger.error(err);
-								logger.error("Not found: " + url);
-								return next(0, []);
-							}
-							callback(null, ciJson);
-						})
-					})
-				},
-				function(ciJson, callback) {
-					// 5. check if it can deploy now or not
+					// 3. check if it can deploy now or not
 					var url = config.deploy.ciServer + config.deploy.sourceDir + appName + '_lock.json';
 					logger.debug(url);
 					var options = {
@@ -130,6 +103,33 @@ exports.deploy = function(req, res, cb) {
 							}
 						}
 					});
+				},
+				function(ciJson, callback) {
+					var cmd = 'sudo /bin/rm -rf ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file;
+					logger.debug(cmd)
+					utils.runCommands([ cmd ], function(err, results) {
+						logger.debug("==========err: " + err);
+						logger.debug("==========results: " + results);
+						if (err) {
+							logger.error("fail: 6. deploy the lastest one")
+						}
+						logger.debug("!!!!!mineJsonPath: " + mineJsonPath);
+						// 5. gets new war, if different
+						url = config.deploy.ciServer + config.deploy.sourceDir + ciJson.file;
+						logger.info("downloading url: " + url + ' to ' + config.deploy[appName].targetFile);
+						var options = {
+							directory : config.rootPath + '/' + config.deploy.sourceDir,
+							filename : ciJson.file
+						}
+						download(url, options, function(err) {
+							if (err) {
+								logger.error(err);
+								logger.error("Not found: " + url);
+								return next(0, []);
+							}
+							callback(null, ciJson);
+						})
+					})
 				},
 				function(ciJson, callback) {
 					// 6. deploy the lastest one
