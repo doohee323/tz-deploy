@@ -197,13 +197,13 @@ exports.deploy = function(req, res, cb) {
 					});
 				} ], function(err, ciJson) {
 
-			var cmd = config.deploy['appName'].postCmd;
+			var cmd = config.deploy[appName].postCmd;
 			logger.info(cmd)
 			utils.runCommands([ cmd ], function(err, results) {
 				logger.debug("==========err: " + err);
 				logger.debug("==========results: " + results);
 				if (err) {
-					logger.error("fail: " + config.deploy['appName'].postCmd)
+					logger.error("fail: " + config.deploy[appName].postCmd)
 				}
 				// 7. set free on repository callback(null, ciJson);
 				return setFree(ciJson, appName, next);
