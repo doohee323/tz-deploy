@@ -402,7 +402,7 @@ var gf_Runscope = function(req, input) {
 var gf_RunCommands = function(array, options, callback) {
   var index = 0;
   var results = [];
-  if(!callback) {
+  if(typeof options === 'function') {
   	callback = options;
   }
   function next() {
