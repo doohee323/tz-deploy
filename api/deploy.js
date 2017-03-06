@@ -286,24 +286,26 @@ exports.deploylist = function(req, res, next) {
 		}
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
-		for(var i=0;i<lbs.length;i++) {
-			logger.error("lbs InstanceId: " + lbs[i].InstanceId);
-			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lbs[i].InstanceId + '"';
-			logger.info(cmd)
-			utils.runCommands([ cmd ], function(err, results) {
-				logger.debug("==========err: " + err);
-				logger.debug("==========results: " + results);
-				if (err) {
-					logger.error("fail: " + config.deploy[appName].postCmd);
-				}
-				var instJson = JSON.parse(results);
-				var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
-				logger.debug("==========pbip: " + pbip);
-			});
-		}
-		return next(0, []);
+
+		Object.keys(lbs).forEach(function(lb, i) {
+			setTimeout(function() {
+				logger.error("lbs InstanceId: " + lb.InstanceId);
+				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
+				logger.info(cmd)
+				utils.runCommands([ cmd ], function(err, results) {
+					logger.debug("==========err: " + err);
+					logger.debug("==========results: " + results);
+					if (err) {
+						logger.error("fail: " + config.deploy[appName].postCmd);
+					}
+					var instJson = JSON.parse(results);
+					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
+					logger.debug("==========pbip: " + pbip);
+				});				
+			}, i * 20000);
+		})
+
 	});
-	
-	
+
 	return next(0, []);
 };
