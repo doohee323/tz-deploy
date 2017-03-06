@@ -306,11 +306,9 @@ exports.deploylist = function(req, res, next) {
 					pbips.push(pbip);
 				});				
 		})
-
-		logger.error("==========pbip1: " + pbip[0]);
-		logger.error("==========pbip2: " + pbip[1]);
-		
 	});
+	logger.error("==========pbip1: " + pbips[0]);
+	logger.error("==========pbip2: " + pbips[1]);
 
 	return next(0, []);
 };
