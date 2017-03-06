@@ -82,7 +82,7 @@ if (config.app.type == 'client') {
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + '*_lock.json';
 	var cmd = 'sudo /bin/rm -rf ' + lockPath;
 	console.log(cmd)
-	utils.runCommands([ cmd ], {}, function(err, results) {
+	utils.runCommands([ cmd ], {}, function(err, options, results) {
 		console.log("==========err: " + err);
 		console.log("==========results: " + results);
 		if (err) {

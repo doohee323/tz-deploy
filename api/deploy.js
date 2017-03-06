@@ -107,7 +107,7 @@ exports.deploy = function(req, res, cb) {
 				function(ciJson, callback) {
 					var cmd = 'sudo /bin/rm -rf ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file;
 					logger.debug(cmd)
-					utils.runCommands([ cmd ], {}, function(err, results) {
+					utils.runCommands([ cmd ], {}, function(err, options, results) {
 						logger.debug("==========err: " + err);
 						logger.debug("==========results: " + results);
 						if (err) {
@@ -135,7 +135,7 @@ exports.deploy = function(req, res, cb) {
 					// 6. deploy the lastest one
 					var cmd = 'sudo /bin/rm -rf ' + config.deploy[appName].targetDir + '/' + config.deploy[appName].targetFile;
 					logger.debug(cmd)
-					utils.runCommands([ cmd ], {}, function(err, results) {
+					utils.runCommands([ cmd ], {}, function(err, options, results) {
 						logger.debug("==========err: " + err);
 						logger.debug("==========results: " + results);
 						if (err) {
@@ -144,7 +144,7 @@ exports.deploy = function(req, res, cb) {
 						cmd = 'sudo /bin/mv ' + config.rootPath + '/' + config.deploy.sourceDir + ciJson.file + ' '
 								+ config.deploy[appName].targetDir + '/' + config.deploy[appName].targetFile;
 						logger.debug(cmd)
-						utils.runCommands([ cmd ], {}, function(err, results) {
+						utils.runCommands([ cmd ], {}, function(err, options, results) {
 							logger.debug("==========err: " + err);
 							logger.debug("==========results: " + results);
 							if (!err) {
@@ -204,7 +204,7 @@ exports.deploy = function(req, res, cb) {
 
 			var cmd = config.deploy[appName].postCmd;
 			logger.info(cmd)
-			utils.runCommands([ cmd ], {}, function(err, results) {
+			utils.runCommands([ cmd ], {}, function(err, options, results) {
 				logger.debug("==========err: " + err);
 				logger.debug("==========results: " + results);
 				if (err) {
@@ -281,7 +281,7 @@ exports.deploylist = function(req, res, next) {
 
 	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
 	logger.info(cmd)
-	utils.runCommands([ cmd ], {}, function(err, results) {
+	utils.runCommands([ cmd ], {}, function(err, options, results) {
 		logger.debug("==========results: " + results);
 		if (err) {
 			logger.error("fail: " + err);
@@ -294,7 +294,7 @@ exports.deploylist = function(req, res, next) {
 			logger.error("lbs InstanceId: " + lb.InstanceId);
 			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 			logger.info(cmd);
-			utils.runCommands([ cmd ], inx, function(err, results) {
+			utils.runCommands([ cmd ], inx, function(err, options, results) {
 				logger.debug("==========err: " + err);
 				logger.debug("==========results: " + results);
 				if (err) {
@@ -305,7 +305,7 @@ exports.deploylist = function(req, res, next) {
 				logger.error("==========pbip: " + pbip);
 				pbips.push(pbip);
 
-				if (inx == (lbs.length - 1)) {
+				if (options.inx == (lbs.length - 1)) {
 					logger.error("==========pbip1: " + pbips[0]);
 					logger.error("==========pbip2: " + pbips[1]);
 
