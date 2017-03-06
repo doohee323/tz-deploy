@@ -318,6 +318,7 @@ exports.deploylist = function(req, res, next) {
 
 						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
 						var url = checkUrl.replace("DOMAIN", pbip);
+						var request = require('request');
 						var options = {
 							url : url,
 							method : 'GET',
