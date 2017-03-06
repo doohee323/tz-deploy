@@ -288,7 +288,7 @@ exports.deploylist = function(req, res, next) {
 		var lbs = lbJson.InstanceStates;
 
 		Object.keys(lbs).forEach(function(idx, i) {
-			setTimeout(function() {
+//			setTimeout(function() {
 				var lb = lbs[idx];
 				logger.error("lb: " + lb);
 				logger.error("lbs InstanceId: " + lb.InstanceId);
@@ -304,7 +304,7 @@ exports.deploylist = function(req, res, next) {
 					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
 					logger.debug("==========pbip: " + pbip);
 				});				
-			}, i * 20000);
+//			}, i * 20000);
 		})
 
 	});
