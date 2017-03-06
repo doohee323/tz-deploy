@@ -279,7 +279,14 @@ exports.deploylist = function(req, res, next) {
 	var request = require('request');
 	var async = require('async');
 
-	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
+	debugger;
+	var appName = req.params.appName;
+	if (!config.deploy[appName] || !config.deploy[appName].awslb) {
+		return next(0, 'invalid appName!');
+	}
+
+	var awslb = config.deploy[appName].awslb;
+	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name ' + awslb + '"';
 	logger.info(cmd)
 	utils.runCommands([ cmd ], {}, function(err, options, results) {
 		if (err) {
@@ -312,11 +319,11 @@ exports.deploylist = function(req, res, next) {
 					})
 				},
 				function(pbips, callback) {
-					va.serviceArry = [];
+					va.services = [];
 					Object.keys(pbips).forEach(function(jdx, i) {
 						var pbip = pbips[jdx];
-						var checkUrl = "http://DOMAIN:8080/home2";
-						var url = checkUrl.replace("DOMAIN", pbip);
+						var checkUrl = config.deploy[appName].checkUrl;
+						var url = checkUrl.replace("localhost", pbip);
 						logger.error("service check: " + url);
 						var options = {
 							url : url,
@@ -336,18 +343,18 @@ exports.deploylist = function(req, res, next) {
 								rslt.statusCode = -2;
 							}
 							logger.error("service rslt: " + rslt);
-							va.serviceArry.push(rslt);
-							if (va.serviceArry.length == lbs.length) {
+							va.services.push(rslt);
+							if (va.services.length == lbs.length) {
 								callback(null, va);
 							}
 						});
 					});
 				},
 				function(va, callback) {
-					va.clientArry = [];
+					va.deploys = [];
 					Object.keys(pbips).forEach(function(jdx, i) {
 						var pbip = pbips[jdx];
-						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
+						var checkUrl = 'http://DOMAIN:3000/' + config.deploy.sourceDir + appName + '_mine.json';
 						var url = checkUrl.replace("DOMAIN", pbip);
 						var options = {
 							url : url,
@@ -366,15 +373,15 @@ exports.deploylist = function(req, res, next) {
 							} else {
 								rslt.statusCode = -2;
 							}
-							va.clientArry.push(rslt);
-							if (va.clientArry.length == lbs.length) {
+							va.deploys.push(rslt);
+							if (va.deploys.length == lbs.length) {
 								callback(null, va);
 							}
 						});
 					});
 				},
 				function(va, callback) {
-					var url = "http://localhost:3000/download/sodatransferboot_lastest.json";
+					var url = 'http://localhost:3000/' + config.deploy.sourceDir + appName + '_lastest.json';
 					var options = {
 						url : url,
 						method : 'GET'
@@ -392,14 +399,14 @@ exports.deploylist = function(req, res, next) {
 						} else {
 							rslt.statusCode = -2;
 						}
-						va.clientArry.push(rslt);
-						for ( var i in va.serviceArry) {
-							logger.error("==========rs.type: " + va.serviceArry[i].type + " /rs.checkUrl: "
-									+ va.serviceArry[i].checkUrl + "/statusCode:" + va.serviceArry[i].statusCode);
+						va.deploys.push(rslt);
+						for ( var i in va.services) {
+							logger.error("==========rs.type: " + va.services[i].type + " /rs.checkUrl: " + va.services[i].checkUrl
+									+ "/statusCode:" + va.services[i].statusCode);
 						}
-						for ( var i in va.clientArry) {
-							logger.error("==========rs.type: " + va.clientArry[i].type + " /rs.checkUrl: "
-									+ va.clientArry[i].checkUrl + "/statusCode:" + va.clientArry[i].statusCode);
+						for ( var i in va.deploys) {
+							logger.error("==========rs.type: " + va.deploys[i].type + " /rs.checkUrl: " + va.deploys[i].checkUrl
+									+ "/statusCode:" + va.deploys[i].statusCode);
 						}
 						callback(null, va);
 					});
