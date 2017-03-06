@@ -329,8 +329,7 @@ exports.deploylist = function(req, res, next) {
 							if (err) {
 								logger.error(err);
 								rslt.statusCode = -1;
-							}
-							if (response) {
+							} else if (response) {
 								rslt.statusCode = response.statusCode;
 							} else {
 								rslt.statusCode = -2;
@@ -356,6 +355,10 @@ exports.deploylist = function(req, res, next) {
 						if (err) {
 							logger.error(err);
 							rslt.statusCode = -1;
+						} else if (response) {
+							rslt.statusCode = response.statusCode;
+						} else {
+							rslt.statusCode = -2;
 						}
 						resultArry.push(rslt);
 						for ( var i in resultArry) {
@@ -363,8 +366,7 @@ exports.deploylist = function(req, res, next) {
 									+ "/statusCode:" + resultArry[i].statusCode);
 						}
 					});
-
-					return next(0, []);
+					return next(0, resultArry);
 				} ], function(err, ciJson) {
 			// 7. set free on repository callback(null, ciJson);
 			return setFree(ciJson, appName, next);
