@@ -289,11 +289,12 @@ exports.deploylist = function(req, res, next) {
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
 		var pbips = [];
+		var va = {};
 		async.waterfall([
 				function(callback) {
 					Object.keys(lbs).forEach(function(idx, i) {
 						var lb = lbs[idx];
-						logger.error("lbs InstanceId: " + lb.InstanceId);
+						logger.debug("lbs InstanceId: " + lb.InstanceId);
 						var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 						logger.info(cmd);
 						utils.runCommands([ cmd ], idx, function(err, idx, results) {
@@ -311,11 +312,12 @@ exports.deploylist = function(req, res, next) {
 					})
 				},
 				function(pbips, callback) {
-					var resultArry = [];
+					va.serviceArry = [];
 					Object.keys(pbips).forEach(function(jdx, i) {
 						var pbip = pbips[jdx];
 						var checkUrl = "http://DOMAIN:8080/home2";
 						var url = checkUrl.replace("DOMAIN", pbip);
+						logger.error("service check: " + url);
 						var options = {
 							url : url,
 							method : 'GET'
@@ -333,14 +335,16 @@ exports.deploylist = function(req, res, next) {
 							} else {
 								rslt.statusCode = -2;
 							}
-							resultArry.push(rslt);
-							if (resultArry.length == lbs.length) {
-								callback(null, resultArry);
+							logger.error("service rslt: " + rslt);
+							va.serviceArry.push(rslt);
+							if (va.serviceArry.length == lbs.length) {
+								callback(null, va);
 							}
 						});
 					});
 				},
-				function(resultArry, callback) {
+				function(va, callback) {
+					va.clientArry = [];
 					Object.keys(pbips).forEach(function(jdx, i) {
 						var pbip = pbips[jdx];
 						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
@@ -362,14 +366,14 @@ exports.deploylist = function(req, res, next) {
 							} else {
 								rslt.statusCode = -2;
 							}
-							resultArry.push(rslt);
-							if (resultArry.length == lbs.length) {
-								callback(null, resultArry);
+							va.clientArry.push(rslt);
+							if (va.clientArry.length == lbs.length) {
+								callback(null, va);
 							}
 						});
 					});
-				},				
-				function(resultArry, callback) {
+				},
+				function(va, callback) {
 					var url = "http://localhost:3000/download/sodatransferboot_lastest.json";
 					var options = {
 						url : url,
@@ -388,15 +392,15 @@ exports.deploylist = function(req, res, next) {
 						} else {
 							rslt.statusCode = -2;
 						}
-						resultArry.push(rslt);
+						va.clientArry.push(rslt);
 						for ( var i in resultArry) {
-							logger.error("==========rs.type: " + resultArry[i].type + " /rs.checkUrl: " + resultArry[i].checkUrl
-									+ "/statusCode:" + resultArry[i].statusCode);
+							logger.error("==========rs.type: " + va.clientArry[i].type + " /rs.checkUrl: "
+									+ va.clientArry[i].checkUrl + "/statusCode:" + va.clientArry[i].statusCode);
 						}
-						callback(null, resultArry);
+						callback(null, va);
 					});
-				} ], function(err, ciJson) {
-			return next(0, resultArry);
+				} ], function(err, va) {
+			return next(0, va);
 		});
 
 		// http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json
