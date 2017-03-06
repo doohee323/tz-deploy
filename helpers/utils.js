@@ -402,15 +402,13 @@ var gf_Runscope = function(req, input) {
 var gf_RunCommands = function(array, options, callback) {
   var index = 0;
   var results = [];
-  console.log("1111");
   if(typeof options === 'function') {
-    console.log("2222");
   	callback = options;
   }
   function next() {
      if (index < array.length) {
          exec(array[index++], function(err, stdout) {
-             if (err) return callback(err, options);
+             if (err) return callback(err);
              // do the next iteration
              results.push(stdout);
              next();
