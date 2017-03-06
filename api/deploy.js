@@ -287,8 +287,9 @@ exports.deploylist = function(req, res, next) {
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
 
-		Object.keys(lbs).forEach(function(lb, i) {
+		Object.keys(lbs).forEach(function(idx, i) {
 			setTimeout(function() {
+				var lb = lbs[idx];
 				logger.error("lb: " + lb);
 				logger.error("lbs InstanceId: " + lb.InstanceId);
 				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
