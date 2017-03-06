@@ -147,13 +147,7 @@ exports.deploy = function(req, res, cb) {
 						utils.runCommands([ cmd ], {}, function(err, options, results) {
 							logger.debug("==========err: " + err);
 							logger.debug("==========results: " + results);
-							if (!err) {
-								callback(null, ciJson);
-							} else {
-								logger.error("fail: 6. deploy the lastest one")
-								// 7. set free on repository callback(null, ciJson);
-								return setFree(ciJson, appName, next);
-							}
+							callback(null, ciJson);
 						}); // 6
 					}); // 6
 				}, function(ciJson, callback) {
