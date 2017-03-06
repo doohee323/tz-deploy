@@ -276,6 +276,8 @@ exports.deploylist = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
+	
+	var pbips = [];
 
 	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
 	logger.info(cmd)
@@ -288,7 +290,6 @@ exports.deploylist = function(req, res, next) {
 		var lbs = lbJson.InstanceStates;
 
 		Object.keys(lbs).forEach(function(idx, i) {
-//			setTimeout(function() {
 				var lb = lbs[idx];
 				logger.error("lbs InstanceId: " + lb.InstanceId);
 				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
@@ -302,10 +303,13 @@ exports.deploylist = function(req, res, next) {
 					var instJson = JSON.parse(results);
 					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
 					logger.error("==========pbip: " + pbip);
+					pbips.push(pbip);
 				});				
-//			}, i * 20000);
 		})
 
+		logger.error("==========pbip1: " + pbip[0]);
+		logger.error("==========pbip2: " + pbip[1]);
+		
 	});
 
 	return next(0, []);
