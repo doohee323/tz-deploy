@@ -369,6 +369,10 @@ exports.deploylist = function(req, res, next) {
 								logger.error(err);
 								rslt.statusCode = -1;
 							} else if (response) {
+								var mineJson = JSON.parse(body);
+								rslt.file = mineJson.file;
+								rslt.size = mineJson.size;
+								rslt.version = mineJson.version;
 								rslt.statusCode = response.statusCode;
 							} else {
 								rslt.statusCode = -2;
@@ -395,6 +399,10 @@ exports.deploylist = function(req, res, next) {
 							logger.error(err);
 							rslt.statusCode = -1;
 						} else if (response) {
+							var ciJson = JSON.parse(body);
+							rslt.file = ciJson.file;
+							rslt.size = ciJson.size;
+							rslt.version = ciJson.version;
 							rslt.statusCode = response.statusCode;
 						} else {
 							rslt.statusCode = -2;
