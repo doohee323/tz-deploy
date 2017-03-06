@@ -276,7 +276,7 @@ exports.deploylist = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
-	
+
 	var pbips = [];
 
 	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
@@ -290,25 +290,70 @@ exports.deploylist = function(req, res, next) {
 		var lbs = lbJson.InstanceStates;
 
 		Object.keys(lbs).forEach(function(idx, i) {
-				var lb = lbs[idx];
-				logger.error("lbs InstanceId: " + lb.InstanceId);
-				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
-				logger.info(cmd)
-				utils.runCommands([ cmd ], function(err, results) {
-					logger.debug("==========err: " + err);
-					logger.debug("==========results: " + results);
-					if (err) {
-						logger.error("fail: " + err);
-					}
-					var instJson = JSON.parse(results);
-					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
-					logger.error("==========pbip: " + pbip);
-					pbips.push(pbip);
-				});				
+			var lb = lbs[idx];
+			logger.error("lbs InstanceId: " + lb.InstanceId);
+			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
+			logger.info(cmd)
+			utils.runCommands([ cmd ], function(err, results) {
+				logger.debug("==========err: " + err);
+				logger.debug("==========results: " + results);
+				if (err) {
+					logger.error("fail: " + err);
+				}
+				var instJson = JSON.parse(results);
+				var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
+				logger.error("==========pbip: " + pbip);
+				pbips.push(pbip);
+
+				if (inx == (lbs.length - 1)) {
+					logger.error("==========pbip1: " + pbips[0]);
+					logger.error("==========pbip2: " + pbips[1]);
+
+					var resultArry = [];
+
+					Object.keys(pbips).forEach(function(jdx, i) {
+						var pbip = pbips[jdx];
+
+						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
+						var url = checkUrl.replace("DOMAIN", pbip);
+						var options = {
+							url : url,
+							method : 'GET',
+						};
+						request(options, function(err, response, body) {
+							var rslt = {
+								checkUrl : url
+							};
+							if (err) {
+								logger.error(err);
+								rslt.statusCode = -1;
+							}
+							if (response) {
+								logger.debug("---response.statusCode: " + response.statusCode);
+								rslt.statusCode = response.statusCode;
+							} else {
+								rslt.statusCode = -2;
+							}
+							resultArry.push(rslt);
+
+							if (jdx == (pbips.length - 1)) {
+								for ( var rs in resultArry) {
+									logger.error("==========rs.checkUrl: " + rs.checkUrl + "/statusCode:" + rs.statusCode);
+								}
+								return next(0, []);
+							}
+						});
+
+					});
+
+					// http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json
+					// http://13.124.49.60:3000/download/sodatransferboot_mine.json
+					// http://13.124.29.171:3000/download/sodatransferboot_mine.json
+					//
+					// http://13.124.49.60:8080/home2
+					// http://13.124.29.171:8080/home2
+				}
+			});
 		})
 	});
-	logger.error("==========pbip1: " + pbips[0]);
-	logger.error("==========pbip2: " + pbips[1]);
-
-	return next(0, []);
 };
