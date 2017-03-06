@@ -301,14 +301,14 @@ exports.deploylist = function(req, res, next) {
 				}
 				var instJson = JSON.parse(results);
 				var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
-				logger.error("==========pbip: " + pbip);
+//				logger.error("==========pbip: " + pbip);
 				pbips.push(pbip);
 
-				logger.error("==========pbips.length: " + pbips.length);
-				logger.error("==========lbs.length: " + lbs.length);
+//				logger.error("==========pbips.length: " + pbips.length);
+//				logger.error("==========lbs.length: " + lbs.length);
 				if (pbips.length == lbs.length) {
-					logger.error("==========pbip1: " + pbips[0]);
-					logger.error("==========pbip2: " + pbips[1]);
+//					logger.error("==========pbip1: " + pbips[0]);
+//					logger.error("==========pbip2: " + pbips[1]);
 
 					var resultArry = [];
 
@@ -317,6 +317,7 @@ exports.deploylist = function(req, res, next) {
 
 						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
 						var url = checkUrl.replace("DOMAIN", pbip);
+						logger.error("==========url: " + url);
 						var request = require('request');
 						var options = {
 							url : url,
