@@ -278,43 +278,6 @@ exports.deploylist = function(req, res, next) {
 	var utils = require('../app.js').utils;
 	var request = require('request');
 
-//	var checkUrl = "http://13.124.49.60:3000/download/sodatransferboot_mine.json";
-//	var options = {
-//			url : checkUrl,
-//			method : 'GET'
-//		};
-//	
-//	debugger;
-//	var resultArry = [];
-//	request(options, function(err, response, body) {
-//		logger.error("==========this.checkUrl: " + this.checkUrl);
-//		logger.error("==========this.jdx: " + this.jdx);
-//		var rslt = {
-//			checkUrl : this.href
-//		};
-//		if (err) {
-//			logger.error(err);
-//			rslt.statusCode = -1;
-//		}
-//		if (response) {
-//			logger.debug("---response: " + response);
-//			logger.debug("---body: " + body);
-//			logger.debug("---response.statusCode: " + response.statusCode);
-//			rslt.statusCode = response.statusCode;
-//		} else {
-//			rslt.statusCode = -2;
-//		}
-//		resultArry.push(rslt);
-//
-//			for ( var rs in resultArry) {
-//				logger.error("==========rs.checkUrl: " + rs.checkUrl + "/statusCode:" + rs.statusCode);
-//			}
-//			return next(0, []);
-//	});
-	
-	
-	var pbips = [];
-
 	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
 	logger.info(cmd)
 	utils.runCommands([ cmd ], {}, function(err, options, results) {
@@ -324,80 +287,70 @@ exports.deploylist = function(req, res, next) {
 		}
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
-
-		Object.keys(lbs).forEach(function(idx, i) {
-			var lb = lbs[idx];
-			logger.error("lbs InstanceId: " + lb.InstanceId);
-			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
-			logger.info(cmd);
-			utils.runCommands([ cmd ], idx, function(err, idx, results) {
-				// logger.debug("==========results: " + results);
-				if (err) {
-					logger.error("fail: " + err);
-				}
-				var instJson = JSON.parse(results);
-				var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
-//				logger.error("==========pbip: " + pbip);
-				pbips.push(pbip);
-
-//				logger.error("==========pbips.length: " + pbips.length);
-//				logger.error("==========lbs.length: " + lbs.length);
-				if (pbips.length == lbs.length) {
-//					logger.error("==========pbip1: " + pbips[0]);
-//					logger.error("==========pbip2: " + pbips[1]);
-
-					var resultArry = [];
-
-					Object.keys(pbips).forEach(function(jdx, i) {
-						var pbip = pbips[jdx];
-
-						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
-						var url = checkUrl.replace("DOMAIN", pbip);
-						logger.error("==========url: " + url);
-						//var request = require('request');
-						var options = {
-							url : url,
-							method : 'GET',
-							jdx : jdx
-						};
-						request(options, function(err, response, body) {
-							logger.error("==========this.checkUrl: " + this.checkUrl);
-							logger.error("==========this.jdx: " + this.jdx);
-							var rslt = {
-								checkUrl : this.href
-							};
-							if (err) {
-								logger.error(err);
-								rslt.statusCode = -1;
-							}
-							if (response) {
-								logger.debug("---response: " + response);
-								logger.debug("---body: " + body);
-								logger.debug("---response.statusCode: " + response.statusCode);
-								rslt.statusCode = response.statusCode;
-							} else {
-								rslt.statusCode = -2;
-							}
-							resultArry.push(rslt);
-
-							if (this.jdx == (pbips.length - 1)) {
-								for ( var i in resultArry) {
-									logger.error("==========rs.checkUrl: " + resultArry[i].checkUrl + "/statusCode:" + resultArry[i].statusCode);
-								}
-								return next(0, []);
-							}
-						});
-
-					});
-
-					// http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json
-					// http://13.124.49.60:3000/download/sodatransferboot_mine.json
-					// http://13.124.29.171:3000/download/sodatransferboot_mine.json
-					//
-					// http://13.124.49.60:8080/home2
-					// http://13.124.29.171:8080/home2
-				}
+		async.waterfall([ function(callback) {
+			Object.keys(lbs).forEach(function(idx, i) {
+				var lb = lbs[idx];
+				logger.error("lbs InstanceId: " + lb.InstanceId);
+				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
+				logger.info(cmd);
+				utils.runCommands([ cmd ], idx, function(err, idx, results) {
+					if (err) {
+						logger.error("fail: " + err);
+					}
+					var instJson = JSON.parse(results);
+					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
+					// logger.error("==========pbip: " + pbip);
+					pbips.push(pbip);
+				});
+			})
+		}, function(pbips, callback) {
+			var resultArry = [];
+			Object.keys(pbips).forEach(function(jdx, i) {
+				var pbip = pbips[jdx];
+				var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
+				var url = checkUrl.replace("DOMAIN", pbip);
+				logger.error("==========url: " + url);
+				var options = {
+					url : url,
+					method : 'GET',
+					jdx : jdx
+				};
+				request(options, function(err, response, body) {
+					logger.error("==========this.checkUrl: " + this.checkUrl);
+					logger.error("==========this.jdx: " + this.jdx);
+					var rslt = {
+						checkUrl : this.href
+					};
+					if (err) {
+						logger.error(err);
+						rslt.statusCode = -1;
+					}
+					if (response) {
+						logger.debug("---response: " + response);
+						logger.debug("---body: " + body);
+						logger.debug("---response.statusCode: " + response.statusCode);
+						rslt.statusCode = response.statusCode;
+					} else {
+						rslt.statusCode = -2;
+					}
+					resultArry.push(rslt);
+				});
 			});
-		})
+		}, function(resultArry, callback) {
+			for ( var i in resultArry) {
+				logger.error("==========rs.checkUrl: " + resultArry[i].checkUrl + "/statusCode:" + resultArry[i].statusCode);
+			}
+			return next(0, []);
+		} ], function(err, ciJson) {
+			// 7. set free on repository callback(null, ciJson);
+			return setFree(ciJson, appName, next);
+		});
+
+		// http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json
+		// http://13.124.49.60:3000/download/sodatransferboot_mine.json
+		// http://13.124.29.171:3000/download/sodatransferboot_mine.json
+		//
+		// http://13.124.49.60:8080/home2
+		// http://13.124.29.171:8080/home2
 	});
 };
