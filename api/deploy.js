@@ -325,6 +325,8 @@ exports.deploylist = function(req, res, next) {
 							jdx : jdx
 						};
 						request(options, function(err, response, body) {
+							logger.error("==========this.url: " + this.url);
+							logger.error("==========this.jdx: " + this.jdx);
 							var rslt = {
 								checkUrl : this.url
 							};
