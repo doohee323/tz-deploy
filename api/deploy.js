@@ -289,6 +289,7 @@ exports.deploylist = function(req, res, next) {
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
 		async.waterfall([ function(callback) {
+			var pbips = [];
 			Object.keys(lbs).forEach(function(idx, i) {
 				var lb = lbs[idx];
 				logger.error("lbs InstanceId: " + lb.InstanceId);
