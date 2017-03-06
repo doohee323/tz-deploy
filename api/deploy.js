@@ -289,6 +289,7 @@ exports.deploylist = function(req, res, next) {
 
 		Object.keys(lbs).forEach(function(lb, i) {
 			setTimeout(function() {
+				logger.error("lb: " + lb);
 				logger.error("lbs InstanceId: " + lb.InstanceId);
 				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 				logger.info(cmd)
@@ -296,7 +297,7 @@ exports.deploylist = function(req, res, next) {
 					logger.debug("==========err: " + err);
 					logger.debug("==========results: " + results);
 					if (err) {
-						logger.error("fail: " + config.deploy[appName].postCmd);
+						logger.error("fail: " + err);
 					}
 					var instJson = JSON.parse(results);
 					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
