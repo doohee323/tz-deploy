@@ -294,7 +294,7 @@ exports.deploylist = function(req, res, next) {
 			logger.error("lbs InstanceId: " + lb.InstanceId);
 			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 			logger.info(cmd);
-			utils.runCommands([ cmd ], inx, function(err, options, results) {
+			utils.runCommands([ cmd ], idx, function(err, options, results) {
 				logger.debug("==========err: " + err);
 				logger.debug("==========results: " + results);
 				if (err) {
