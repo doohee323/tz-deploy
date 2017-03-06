@@ -285,6 +285,7 @@ exports.deploylist = function(req, res, next) {
 		// logger.debug("==========results: " + results);
 		if (err) {
 			logger.error("fail: " + err);
+			return next(0, []);
 		}
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
@@ -298,11 +299,15 @@ exports.deploylist = function(req, res, next) {
 				utils.runCommands([ cmd ], idx, function(err, idx, results) {
 					if (err) {
 						logger.error("fail: " + err);
+						return next(0, []);
 					}
 					var instJson = JSON.parse(results);
 					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
 					// logger.error("==========pbip: " + pbip);
 					pbips.push(pbip);
+					if(pbips.length == lbs.length) {
+						callback(null, pbips);
+					}
 				});
 			})
 		}, function(pbips, callback) {
@@ -336,6 +341,9 @@ exports.deploylist = function(req, res, next) {
 						rslt.statusCode = -2;
 					}
 					resultArry.push(rslt);
+					if(resultArry.length == lbs.length) {
+						callback(null, resultArry);
+					}
 				});
 			});
 		}, function(resultArry, callback) {
