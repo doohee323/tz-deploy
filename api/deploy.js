@@ -277,7 +277,7 @@ exports.deploylist = function(req, res, next) {
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
 
-	var cmd = "aws elb describe-instance-health --load-balancer-name jetty-autoscaling";
+	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
 	logger.info(cmd)
 	utils.runCommands([ cmd ], function(err, results) {
 		logger.debug("==========err: " + err);
