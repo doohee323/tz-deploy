@@ -382,7 +382,7 @@ exports.deploylist = function(req, res, next) {
 
 							if (this.jdx == (pbips.length - 1)) {
 								for ( var i in resultArry) {
-									logger.error("==========rs.checkUrl: " + rs[i].checkUrl + "/statusCode:" + rs[i].statusCode);
+									logger.error("==========rs.checkUrl: " + resultArry[i].checkUrl + "/statusCode:" + resultArry[i].statusCode);
 								}
 								return next(0, []);
 							}
