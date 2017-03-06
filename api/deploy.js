@@ -276,7 +276,43 @@ exports.deploylist = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
+	var request = require('request');
 
+//	var checkUrl = "http://13.124.49.60:3000/download/sodatransferboot_mine.json";
+//	var options = {
+//			url : checkUrl,
+//			method : 'GET'
+//		};
+//	
+//	debugger;
+//	var resultArry = [];
+//	request(options, function(err, response, body) {
+//		logger.error("==========this.checkUrl: " + this.checkUrl);
+//		logger.error("==========this.jdx: " + this.jdx);
+//		var rslt = {
+//			checkUrl : this.href
+//		};
+//		if (err) {
+//			logger.error(err);
+//			rslt.statusCode = -1;
+//		}
+//		if (response) {
+//			logger.debug("---response: " + response);
+//			logger.debug("---body: " + body);
+//			logger.debug("---response.statusCode: " + response.statusCode);
+//			rslt.statusCode = response.statusCode;
+//		} else {
+//			rslt.statusCode = -2;
+//		}
+//		resultArry.push(rslt);
+//
+//			for ( var rs in resultArry) {
+//				logger.error("==========rs.checkUrl: " + rs.checkUrl + "/statusCode:" + rs.statusCode);
+//			}
+//			return next(0, []);
+//	});
+	
+	
 	var pbips = [];
 
 	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
@@ -318,17 +354,17 @@ exports.deploylist = function(req, res, next) {
 						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
 						var url = checkUrl.replace("DOMAIN", pbip);
 						logger.error("==========url: " + url);
-						var request = require('request');
+						//var request = require('request');
 						var options = {
 							url : url,
 							method : 'GET',
 							jdx : jdx
 						};
 						request(options, function(err, response, body) {
-							logger.error("==========this.url: " + this.url);
+							logger.error("==========this.checkUrl: " + this.checkUrl);
 							logger.error("==========this.jdx: " + this.jdx);
 							var rslt = {
-								checkUrl : this.url
+								checkUrl : this.href
 							};
 							if (err) {
 								logger.error(err);
@@ -345,8 +381,8 @@ exports.deploylist = function(req, res, next) {
 							resultArry.push(rslt);
 
 							if (this.jdx == (pbips.length - 1)) {
-								for ( var rs in resultArry) {
-									logger.error("==========rs.checkUrl: " + rs.checkUrl + "/statusCode:" + rs.statusCode);
+								for ( var i in resultArry) {
+									logger.error("==========rs.checkUrl: " + rs[i].checkUrl + "/statusCode:" + rs[i].statusCode);
 								}
 								return next(0, []);
 							}

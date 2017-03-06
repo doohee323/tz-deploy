@@ -43,7 +43,7 @@
 	
 	with appName parameter
 	devtool app.js sodatransfer --index index.html --watch
-
+	
 ```
 
 2. set jenkins's Execute Shell
