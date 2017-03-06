@@ -273,5 +273,34 @@ exports.free = function(req, res, next) {
 };
 
 exports.deploylist = function(req, res, next) {
+	var cmd = "aws elb describe-instance-health --load-balancer-name jetty-autoscaling";
+	logger.info(cmd)
+	utils.runCommands([ cmd ], function(err, results) {
+		logger.debug("==========err: " + err);
+		logger.debug("==========results: " + results);
+		if (err) {
+			logger.error("fail: " + config.deploy[appName].postCmd);
+		}
+		var lbJson = JSON.parse(results);
+		var lbs = lbJson.InstanceStates;
+		for(var i=0;i<lbs.length;i++) {
+			logger.error("lbs InstanceId: " + lbs[i].InstanceId);
+			var cmd = "aws ec2 describe-instances --instance-ids " + lbs[i].InstanceId;
+			logger.info(cmd)
+			utils.runCommands([ cmd ], function(err, results) {
+				logger.debug("==========err: " + err);
+				logger.debug("==========results: " + results);
+				if (err) {
+					logger.error("fail: " + config.deploy[appName].postCmd);
+				}
+				var instJson = JSON.parse(results);
+				var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
+				logger.debug("==========pbip: " + pbip);
+			});
+		}
+		return next(0, []);
+	});
+	
+	
 	return next(0, []);
 };
