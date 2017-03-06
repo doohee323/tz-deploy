@@ -393,7 +393,11 @@ exports.deploylist = function(req, res, next) {
 							rslt.statusCode = -2;
 						}
 						va.clientArry.push(rslt);
-						for ( var i in resultArry) {
+						for ( var i in va.serviceArry) {
+							logger.error("==========rs.type: " + va.serviceArry[i].type + " /rs.checkUrl: "
+									+ va.serviceArry[i].checkUrl + "/statusCode:" + va.serviceArry[i].statusCode);
+						}
+						for ( var i in va.clientArry) {
 							logger.error("==========rs.type: " + va.clientArry[i].type + " /rs.checkUrl: "
 									+ va.clientArry[i].checkUrl + "/statusCode:" + va.clientArry[i].statusCode);
 						}
