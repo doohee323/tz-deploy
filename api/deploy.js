@@ -282,7 +282,7 @@ exports.deploylist = function(req, res, next) {
 	var cmd = 'su - ubuntu -c "aws elb describe-instance-health --load-balancer-name jetty-autoscaling"';
 	logger.info(cmd)
 	utils.runCommands([ cmd ], {}, function(err, options, results) {
-		//logger.debug("==========results: " + results);
+		// logger.debug("==========results: " + results);
 		if (err) {
 			logger.error("fail: " + err);
 		}
@@ -295,8 +295,7 @@ exports.deploylist = function(req, res, next) {
 			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 			logger.info(cmd);
 			utils.runCommands([ cmd ], idx, function(err, idx, results) {
-				logger.debug("==========err: " + err);
-				//logger.debug("==========results: " + results);
+				// logger.debug("==========results: " + results);
 				if (err) {
 					logger.error("fail: " + err);
 				}
@@ -305,9 +304,9 @@ exports.deploylist = function(req, res, next) {
 				logger.error("==========pbip: " + pbip);
 				pbips.push(pbip);
 
-				logger.error("==========idx: " + idx);
+				logger.error("==========pbips.length: " + pbips.length);
 				logger.error("==========lbs.length: " + lbs.length);
-				if (idx == (lbs.length - 1)) {
+				if (pbips.length == lbs.length) {
 					logger.error("==========pbip1: " + pbips[0]);
 					logger.error("==========pbip2: " + pbips[1]);
 
