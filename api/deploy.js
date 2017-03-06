@@ -274,6 +274,7 @@ exports.free = function(req, res, next) {
 
 exports.deploylist = function(req, res, next) {
 	var logger = require('../app.js').winston;
+	var config = require('../app.js').config;
 	var utils = require('../app.js').utils;
 
 	var cmd = "aws elb describe-instance-health --load-balancer-name jetty-autoscaling";
@@ -282,7 +283,7 @@ exports.deploylist = function(req, res, next) {
 		logger.debug("==========err: " + err);
 		logger.debug("==========results: " + results);
 		if (err) {
-			logger.error("fail: " + config.deploy[appName].postCmd);
+			logger.error("fail: " + err);
 		}
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
