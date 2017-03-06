@@ -6,12 +6,12 @@ var logger = require('../app.js').winston;
 var exec = require('child_process').exec;
 
 /**
-* @function 	remove element from object
-*/
-function gf_RemoveElem(obj, target){
+ * @function remove element from object
+ */
+function gf_RemoveElem(obj, target) {
 	var arry = target.split(',');
-	for (var i in arry) {
-    	delete obj[arry[i]];
+	for ( var i in arry) {
+		delete obj[arry[i]];
 	}
 	return obj;
 }
@@ -22,34 +22,36 @@ function gf_RemoveElem(obj, target){
  * @desc : export from rslt to csv response
  */
 function gf_ExportCvs(res, rslt, file) {
-	res.setHeader('Content-disposition', 'attachment; filename="' + file + '.csv"'); 
-	res.setHeader('Content-type', 'text/csv'); 
+	res.setHeader('Content-disposition', 'attachment; filename="' + file + '.csv"');
+	res.setHeader('Content-type', 'text/csv');
 
 	// header
-	var body = ''; 
-	if(!rslt) {
+	var body = '';
+	if (!rslt) {
 		return;
 	}
-    for (var j = 0; j < Object.keys(rslt[0]).length; j++) {
-    	body +=  Object.keys(rslt[0])[j] + ',';
-    };
-	body += '\n'; 
-	res.write(body); 
-	
+	for (var j = 0; j < Object.keys(rslt[0]).length; j++) {
+		body += Object.keys(rslt[0])[j] + ',';
+	}
+	;
+	body += '\n';
+	res.write(body);
+
 	// body
-	for(var i = 0; i < rslt.length; i++) { 
-		body = ''; 
-	    for (var j in rslt[i]) {
-	        if (!rslt[i].hasOwnProperty(j)) continue;
-	        if (typeof rslt[i][j] != 'function') {
-				body +=  (rslt[i][j] + '').replaceAll(',', '') + ',';
-			} 
-	    }
-	    //console.log(body);
-		body += '\n'; 
-		res.write(body); 
-	} 
-	res.end(''); 
+	for (var i = 0; i < rslt.length; i++) {
+		body = '';
+		for ( var j in rslt[i]) {
+			if (!rslt[i].hasOwnProperty(j))
+				continue;
+			if (typeof rslt[i][j] != 'function') {
+				body += (rslt[i][j] + '').replaceAll(',', '') + ',';
+			}
+		}
+		// console.log(body);
+		body += '\n';
+		res.write(body);
+	}
+	res.end('');
 }
 
 /**
@@ -58,22 +60,26 @@ function gf_ExportCvs(res, rslt, file) {
  * @desc : handle session out
  */
 function gf_CheckSession(req) {
-	if(process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
+	if (process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
 	} else {
-		if(!req.session.user) return gf_Response(res, {code: -3, message: 'no session! ' + req.url});
+		if (!req.session.user)
+			return gf_Response(res, {
+				code : -3,
+				message : 'no session! ' + req.url
+			});
 	}
 }
 
 function gf_SortByKey(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key];
-        var y = b[key];
-        if (typeof x == "string") {
-            x = x.toLowerCase(); 
-            y = y.toLowerCase();
-        }
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
+	return array.sort(function(a, b) {
+		var x = a[key];
+		var y = b[key];
+		if (typeof x == "string") {
+			x = x.toLowerCase();
+			y = y.toLowerCase();
+		}
+		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	});
 }
 
 /**
@@ -84,29 +90,30 @@ function gf_SortByKey(array, key) {
 function gf_SendEmail(config, mailOptions, cb) {
 	var nodemailer = require('nodemailer');
 	var ses = require('nodemailer-ses-transport');
-	
-	//var transporter = nodemailer.createTransport({
-  //  service: 'Gmail',
-  //  auth: {
-  //    user: config.email.from,
-  //    pass: 'fhzptahslxj!323'
-  //  }
-	//});
+
+	// var transporter = nodemailer.createTransport({
+	// service: 'Gmail',
+	// auth: {
+	// user: config.email.from,
+	// pass: 'fhzptahslxj!323'
+	// }
+	// });
 	var transporter = nodemailer.createTransport(ses({
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey
+		accessKeyId : config.aws.accessKeyId,
+		secretAccessKey : config.aws.secretAccessKey
 	}));
-	
-	transporter.sendMail(mailOptions, function(error, info){
+
+	transporter.sendMail(mailOptions, function(error, info) {
 		var rslt = {};
-    if(error){
-      console.log(error);
-    }else{
-      if(info.response) console.log('Message sent: ' + info.response);
-	    rslt.message = info.response;
-    }
-    rslt.error = error;
-    cb(rslt);
+		if (error) {
+			console.log(error);
+		} else {
+			if (info.response)
+				console.log('Message sent: ' + info.response);
+			rslt.message = info.response;
+		}
+		rslt.error = error;
+		cb(rslt);
 	});
 }
 
@@ -117,30 +124,30 @@ function gf_SendEmail(config, mailOptions, cb) {
  */
 function gf_SetCrontab(frequency, input, runable) {
 	var CronJob = require('cron').CronJob;
-	
-    //rule = '0 */2 * * * *';  // every two minutes
-    //rule = '0 0 */2 * * *';  // every two hours
-    //rule = '* * * * * *';		// every seconds
-    var rule = '';
-    var fq = frequency.split('/');
-    var cnt = parseInt(fq[0]);
-    if(fq[1] == 'Hour') {
-    	cnt = 60 / cnt;
-    	rule = '0 */' + cnt + ' * * * *';
-    } else if(fq[1] == 'Day') {
-    	cnt = 24 / cnt;
-    	rule = '0 0 */' + cnt + ' * * *';
-    }
-    
+
+	// rule = '0 */2 * * * *'; // every two minutes
+	// rule = '0 0 */2 * * *'; // every two hours
+	// rule = '* * * * * *'; // every seconds
+	var rule = '';
+	var fq = frequency.split('/');
+	var cnt = parseInt(fq[0]);
+	if (fq[1] == 'Hour') {
+		cnt = 60 / cnt;
+		rule = '0 */' + cnt + ' * * * *';
+	} else if (fq[1] == 'Day') {
+		cnt = 24 / cnt;
+		rule = '0 0 */' + cnt + ' * * *';
+	}
+
 	var job = new CronJob({
-		cronTime: rule,
-		onTick: function() {
+		cronTime : rule,
+		onTick : function() {
 			runable(input);
 		},
-		start: false,
-		timeZone: "America/Los_Angeles"
+		start : false,
+		timeZone : "America/Los_Angeles"
 	});
-	job.start();    
+	job.start();
 	return job;
 }
 
@@ -152,9 +159,10 @@ function gf_SetCrontab(frequency, input, runable) {
 function gf_GetUTC(date, format) {
 	var time = new Date(0);
 	time.setUTCSeconds(date);
-	if(!format) format = 'YYYY-MM-DD';
-    time = moment(time).format(format);
-    return time;
+	if (!format)
+		format = 'YYYY-MM-DD';
+	time = moment(time).format(format);
+	return time;
 }
 
 /**
@@ -163,21 +171,21 @@ function gf_GetUTC(date, format) {
  * @desc : file copy
  */
 function gf_CopyFile(source, target, cb) {
-  var cbCalled = false;
-  var rd = fs.createReadStream(source);
-  rd.on("error", done);
-  var wr = fs.createWriteStream(target);
-  wr.on("error", done);
-  wr.on("close", function(ex) {
-    done();
-  });
-  rd.pipe(wr);
-  function done(err) {
-    if (!cbCalled) {
-      cb(err);
-      cbCalled = true;
-    }
-  }
+	var cbCalled = false;
+	var rd = fs.createReadStream(source);
+	rd.on("error", done);
+	var wr = fs.createWriteStream(target);
+	wr.on("error", done);
+	wr.on("close", function(ex) {
+		done();
+	});
+	rd.pipe(wr);
+	function done(err) {
+		if (!cbCalled) {
+			cb(err);
+			cbCalled = true;
+		}
+	}
 }
 
 /**
@@ -187,8 +195,8 @@ function gf_CopyFile(source, target, cb) {
  */
 function gf_Error(logger, conn, rslt) {
 	conn.release();
-  rslt.code = -1;
-  rslt.message = 'System error!';
+	rslt.code = -1;
+	rslt.message = 'System error!';
 	logger.error(rslt);
 }
 
@@ -198,10 +206,11 @@ function gf_Error(logger, conn, rslt) {
  * @desc : get value from html with handle
  */
 function gf_GetValFromHtml(body, key, handle) {
-	var rslt; 
-	if(body.indexOf(handle) > -1) {
-		rslt = body.substring(body.indexOf(key, body.indexOf(handle)) + key.length + 2, body.indexOf('>', body. indexOf(handle)) - 1).trim();
-		if(!rslt.startsWith('\"') && rslt.endsWith('\"') || !rslt.startsWith('\'') && rslt.endsWith('\'')) {
+	var rslt;
+	if (body.indexOf(handle) > -1) {
+		rslt = body.substring(body.indexOf(key, body.indexOf(handle)) + key.length + 2,
+				body.indexOf('>', body.indexOf(handle)) - 1).trim();
+		if (!rslt.startsWith('\"') && rslt.endsWith('\"') || !rslt.startsWith('\'') && rslt.endsWith('\'')) {
 			rslt = rslt.substring(0, rslt.length - 1);
 		}
 	}
@@ -209,217 +218,222 @@ function gf_GetValFromHtml(body, key, handle) {
 	return rslt !== void 0 ? entities.decodeHTML(rslt) : '';
 }
 
-var gf_CheckUrl = function (str) {
+var gf_CheckUrl = function(str) {
 	var regx = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
-	str = str === void 0 ? '': str;
-	if (str.match(regx)){
-    	return true;
+	str = str === void 0 ? '' : str;
+	if (str.match(regx)) {
+		return true;
 	}
 	return false;
 };
 
 var gf_CheckImage = function(str) {
-  var regx = /(jpg|gif|png|jpeg)$/;
-  if (str.match(regx)){
-    return true;
-  }
-  return false;
-};  
+	var regx = /(jpg|gif|png|jpeg)$/;
+	if (str.match(regx)) {
+		return true;
+	}
+	return false;
+};
 
 var gf_HttpCall = function(type, options, cb) {
 	var request = require('request');
 	var req;
-	if(type == 'post') {
-		req = request.post(options, function(error, resp, body){
+	if (type == 'post') {
+		req = request.post(options, function(error, resp, body) {
 			cb(error, resp, body);
 		});
-	} else if(type == 'get') {
-		req = request(options, function (error, resp, body) {
-		  cb(error, resp, body);
+	} else if (type == 'get') {
+		req = request(options, function(error, resp, body) {
+			cb(error, resp, body);
 		})
 	}
 	req.end();
-};  
+};
 
 var gf_Request = function(req) {
 	var config = require('../app.js').config;
-	if(!config.logging.input) return;
+	if (!config.logging.input)
+		return;
 	var logger = require('../app.js').winston;
 	var time = '[' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
 	logger.debug(time + '[' + req.url + ']' + '=============');
 	var input;
 	input = req.query;
-	if(input && Object.keys(input).length > 0) {
+	if (input && Object.keys(input).length > 0) {
 		input = JSON.stringify(input);
 		logger.debug(time + '- input params' + time + JSON.stringify(input));
 	}
 	input = req.params;
-	if(input && Object.keys(input).length > 0) {
+	if (input && Object.keys(input).length > 0) {
 		input = JSON.stringify(input);
 		logger.debug(time + '- input params:' + time + JSON.stringify(input));
 	}
 	input = req.body;
-	if(input && Object.keys(input).length > 0) {
+	if (input && Object.keys(input).length > 0) {
 		input = JSON.stringify(input);
 		logger.debug(time + '- input params:' + time + JSON.stringify(input));
 	}
 	gf_Runscope(req, input);
 	return input;
-};  
+};
 
 var gf_Response = function(res, rslt, errCode) {
 	var config = require('../app.js').config;
-	if(!config.logging.output) {
+	if (!config.logging.output) {
 		res.json(rslt, errCode);
 		return;
 	}
 	var time = '[' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
 	var logger = require('../app.js').winston;
-	if(typeof rslt == 'object') {
+	if (typeof rslt == 'object') {
 		var rslt2 = JSON.parse(JSON.stringify(rslt));
-		if(rslt2 && Object.keys(rslt2).length > 0) {
-		  for (var j = 0; j < Object.keys(rslt2).length; j++) {
-		  	if(typeof rslt2[Object.keys(rslt2)[j]] == 'object' && rslt2[Object.keys(rslt2)[j]] != null && rslt2[Object.keys(rslt2)[j]].length > 2) { // array
-					logger.debug(time + '- return values was truncated for short logging!: ' + rslt2[Object.keys(rslt2)[j]].length);
-		  		rslt2[Object.keys(rslt2)[j]] = rslt2[Object.keys(rslt2)[j]][0];
-		  	}
-		  };
+		if (rslt2 && Object.keys(rslt2).length > 0) {
+			for (var j = 0; j < Object.keys(rslt2).length; j++) {
+				if (typeof rslt2[Object.keys(rslt2)[j]] == 'object' && rslt2[Object.keys(rslt2)[j]] != null
+						&& rslt2[Object.keys(rslt2)[j]].length > 2) { // array
+					logger.debug(time + '- return values was truncated for short logging!: '
+							+ rslt2[Object.keys(rslt2)[j]].length);
+					rslt2[Object.keys(rslt2)[j]] = rslt2[Object.keys(rslt2)[j]][0];
+				}
+			}
+			;
 			logger.debug(time + '- return values:' + JSON.stringify(rslt2));
 		}
 	} else {
 		logger.debug(time + '- return values:' + JSON.stringify(rslt));
 	}
 	logger.debug(time + '[end]========================================================================================');
-	if(errCode) {
+	if (errCode) {
 		res.json(rslt, errCode);
 	} else {
 		res.json(rslt);
 	}
-};  
+};
 
 var gf_LoggingFromClient = function(req) {
 	var config = require('../app.js').config;
-	if(!config.logging.client) return;
+	if (!config.logging.client)
+		return;
 	var time = '[client][' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
 	var logger = require('../app.js').winston;
-	logger.debug(time + '[begin]========================================================================================');
+	logger
+			.debug(time + '[begin]========================================================================================');
 	logger.debug(time + ' title: ' + req.body.title);
 	var arry = req.body.stack.split('\n');
-	for(var i=0;i<arry.length;i++) {
+	for (var i = 0; i < arry.length; i++) {
 		logger.debug(time + '	' + arry[i]);
 	}
-	logger.debug(time + ' user:' + req.body.user.full_name + '(' + req.body.user.user_email + ')' );
+	logger.debug(time + ' user:' + req.body.user.full_name + '(' + req.body.user.user_email + ')');
 	logger.debug(time + '[end]========================================================================================');
 };
-  
+
 var gf_Log = function(level, rslt) {
 	var config = require('../app.js').config;
-	if(!config.logging[level]) return;
+	if (!config.logging[level])
+		return;
 	var time = '[' + moment().utc().format('YYYYMMDDHHmmssSS') + ']';
 	var logger = require('../app.js').winston;
 	logger.debug(time + JSON.stringify(rslt));
 };
-  
+
 var gf_GetSession = function(req, cb) {
 	var config = require('../app.js').config;
-	if(config.redis.useYn == 'Y') {
+	if (config.redis.useYn == 'Y') {
 		var redis_helpers = require('./redis_helpers');
 		var token = req.headers.authorization;
 		var rslt = {};
-		if(!token || token == "Bearer undefined") {
+		if (!token || token == "Bearer undefined") {
 			rslt.code = -1;
 			cb(null, rslt);
 			return;
 		}
-		if(token.length > 'Bearer '.length) {
+		if (token.length > 'Bearer '.length) {
 			token = token.substring('Bearer '.length, token.length);
 		}
-		if(config.runscope.useYn == 'Y') {
-    	rslt.code = 0;
-      cb(null, rslt);		
-      return;	
+		if (config.runscope.useYn == 'Y') {
+			rslt.code = 0;
+			cb(null, rslt);
+			return;
 		}
-		redis_helpers.getKeys(token, function(err, entries){
-	    if(err !== null){
-	      rslt.code = -2;
-	      rslt.message = 'Can\'t get session info. from Redis.';
-	      cb(err, rslt);
+		redis_helpers.getKeys(token, function(err, entries) {
+			if (err !== null) {
+				rslt.code = -2;
+				rslt.message = 'Can\'t get session info. from Redis.';
+				cb(err, rslt);
 				return;
-	    }
-	    redis_helpers.get(token, function(err, session){
-	      if(err) {
-	      	rslt.code = -1;
-	      	cb(err, rslt);
-	      } else {
-	      	req.session.referer = session.referer;
-			req.session.app_name = session.app_name;
-	        req.session.user = session.user;
-	        req.session.developer = session.developer;
-	        req.session.priv_cd = session.priv_cd;
-	        req.session.priv = session.priv;
-		      req.session.admin = session.admin;
-		      req.session.developer = session.developer;
-		    	rslt.code = 0;
-		    	rslt.session = req.session;
-		    	rslt.token = token;
-	        cb(null, rslt);
-	      }
-	    });
-	  }, 10);		
+			}
+			redis_helpers.get(token, function(err, session) {
+				if (err) {
+					rslt.code = -1;
+					cb(err, rslt);
+				} else {
+					req.session.referer = session.referer;
+					req.session.app_name = session.app_name;
+					req.session.user = session.user;
+					req.session.developer = session.developer;
+					req.session.priv_cd = session.priv_cd;
+					req.session.priv = session.priv;
+					req.session.admin = session.admin;
+					req.session.developer = session.developer;
+					rslt.code = 0;
+					rslt.session = req.session;
+					rslt.token = token;
+					cb(null, rslt);
+				}
+			});
+		}, 10);
 	} else {
-		cb(null, {code: 0});
+		cb(null, {
+			code : 0
+		});
 	}
 };
-  
+
 var gf_Runscope = function(req, input) {
 	var config = require('../app.js').config;
-	if(config.runscope.useYn == 'Y') {
+	if (config.runscope.useYn == 'Y') {
 		var request = require('request'); // /loggingFromClient
-		if(!input) {
+		if (!input) {
 			input = gf_Request(req);
 		}
-		if(req.method == 'POST') {
-			request.post(
-		    'http://dashboard_staging-gettopzone-com-l9ic6qdrj4fs.runscope.net' + req.url,
-		    { form: input },
-		    function (error, response, body) {
-		      if (!error && response.statusCode == 200) {
-		      	console.log(body)
-		      }
-		    }
-			);         
+		if (req.method == 'POST') {
+			request.post('http://dashboard_staging-gettopzone-com-l9ic6qdrj4fs.runscope.net' + req.url, {
+				form : input
+			}, function(error, response, body) {
+				if (!error && response.statusCode == 200) {
+					console.log(body)
+				}
+			});
 		} else {
-			var url ='http://dashboard_staging-gettopzone-com-l9ic6qdrj4fs.runscope.net' + req.url
-			request(url, function (error, response, body) {
-			  if (!error) {
-			    console.log(body)
-			   }
-			 })		    		
+			var url = 'http://dashboard_staging-gettopzone-com-l9ic6qdrj4fs.runscope.net' + req.url
+			request(url, function(error, response, body) {
+				if (!error) {
+					console.log(body)
+				}
+			})
 		}
 	}
 }
 
 var gf_RunCommands = function(array, options, callback) {
-  var index = 0;
-  var results = [];
-  if(typeof options === 'function') {
-  	callback = options;
-  }
-  function next() {
-     if (index < array.length) {
-         exec(array[index++], function(err, stdout) {
-             if (err) return callback(err);
-             // do the next iteration
-             results.push(stdout);
-             next();
-         });
-     } else {
-         // all done here
-         callback(null, options, results);
-     }
-  }
-  // start the first iteration
-  next();
+	var index = 0;
+	var results = [];
+	function next() {
+		if (index < array.length) {
+			exec(array[index++], function(err, stdout) {
+				if (err)
+					return callback(err);
+				// do the next iteration
+				results.push(stdout);
+				next();
+			});
+		} else {
+			// all done here
+			callback(null, options, results);
+		}
+	}
+	// start the first iteration
+	next();
 }
 
 exports.sortByKey = gf_SortByKey;
