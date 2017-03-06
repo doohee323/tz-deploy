@@ -326,13 +326,15 @@ exports.deploylist = function(req, res, next) {
 						};
 						request(options, function(err, response, body) {
 							var rslt = {
-								checkUrl : url
+								checkUrl : this.url
 							};
 							if (err) {
 								logger.error(err);
 								rslt.statusCode = -1;
 							}
 							if (response) {
+								logger.debug("---response: " + response);
+								logger.debug("---body: " + body);
 								logger.debug("---response.statusCode: " + response.statusCode);
 								rslt.statusCode = response.statusCode;
 							} else {
