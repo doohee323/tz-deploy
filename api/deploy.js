@@ -290,7 +290,6 @@ exports.deploylist = function(req, res, next) {
 		Object.keys(lbs).forEach(function(idx, i) {
 //			setTimeout(function() {
 				var lb = lbs[idx];
-				logger.error("lb: " + lb);
 				logger.error("lbs InstanceId: " + lb.InstanceId);
 				var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 				logger.info(cmd)
@@ -302,7 +301,7 @@ exports.deploylist = function(req, res, next) {
 					}
 					var instJson = JSON.parse(results);
 					var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
-					logger.debug("==========pbip: " + pbip);
+					logger.error("==========pbip: " + pbip);
 				});				
 //			}, i * 20000);
 		})
