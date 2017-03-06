@@ -288,9 +288,9 @@ exports.deploylist = function(req, res, next) {
 		}
 		var lbJson = JSON.parse(results);
 		var lbs = lbJson.InstanceStates;
+		var pbips = [];
 		async.waterfall([
 				function(callback) {
-					var pbips = [];
 					Object.keys(lbs).forEach(function(idx, i) {
 						var lb = lbs[idx];
 						logger.error("lbs InstanceId: " + lb.InstanceId);
@@ -314,12 +314,40 @@ exports.deploylist = function(req, res, next) {
 					var resultArry = [];
 					Object.keys(pbips).forEach(function(jdx, i) {
 						var pbip = pbips[jdx];
+						var checkUrl = "http://DOMAIN:8080/home2";
+						var url = checkUrl.replace("DOMAIN", pbip);
+						var options = {
+							url : url,
+							method : 'GET'
+						};
+						request(options, function(err, response, body) {
+							var rslt = {
+								checkUrl : this.href,
+								type : 'service'
+							};
+							if (err) {
+								logger.error(err);
+								rslt.statusCode = -1;
+							} else if (response) {
+								rslt.statusCode = response.statusCode;
+							} else {
+								rslt.statusCode = -2;
+							}
+							resultArry.push(rslt);
+							if (resultArry.length == lbs.length) {
+								callback(null, resultArry);
+							}
+						});
+					});
+				},
+				function(resultArry, callback) {
+					Object.keys(pbips).forEach(function(jdx, i) {
+						var pbip = pbips[jdx];
 						var checkUrl = "http://DOMAIN:3000/download/sodatransferboot_mine.json";
 						var url = checkUrl.replace("DOMAIN", pbip);
 						var options = {
 							url : url,
-							method : 'GET',
-							jdx : jdx
+							method : 'GET'
 						};
 						request(options, function(err, response, body) {
 							var rslt = {
@@ -340,7 +368,7 @@ exports.deploylist = function(req, res, next) {
 							}
 						});
 					});
-				},
+				},				
 				function(resultArry, callback) {
 					var url = "http://localhost:3000/download/sodatransferboot_lastest.json";
 					var options = {
@@ -365,11 +393,10 @@ exports.deploylist = function(req, res, next) {
 							logger.error("==========rs.type: " + resultArry[i].type + " /rs.checkUrl: " + resultArry[i].checkUrl
 									+ "/statusCode:" + resultArry[i].statusCode);
 						}
+						callback(null, resultArry);
 					});
-					return next(0, resultArry);
 				} ], function(err, ciJson) {
-			// 7. set free on repository callback(null, ciJson);
-			return setFree(ciJson, appName, next);
+			return next(0, resultArry);
 		});
 
 		// http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json
