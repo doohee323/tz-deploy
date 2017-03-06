@@ -342,7 +342,7 @@ exports.deploylist = function(req, res, next) {
 					});
 				},
 				function(resultArry, callback) {
-					var url = "http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json";
+					var url = "http://localhost:3000/download/sodatransferboot_lastest.json";
 					var options = {
 						url : url,
 						method : 'GET'
