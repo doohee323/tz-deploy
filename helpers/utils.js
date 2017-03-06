@@ -399,20 +399,23 @@ var gf_Runscope = function(req, input) {
 	}
 }
 
-var gf_RunCommands = function(array, callback) {
+var gf_RunCommands = function(array, options, callback) {
   var index = 0;
   var results = [];
+  if(!callback) {
+  	callback = options;
+  }
   function next() {
      if (index < array.length) {
          exec(array[index++], function(err, stdout) {
-             if (err) return callback(err);
+             if (err) return callback(err, options);
              // do the next iteration
              results.push(stdout);
              next();
          });
      } else {
          // all done here
-         callback(null, results);
+         callback(null, options, results);
      }
   }
   // start the first iteration

@@ -293,8 +293,8 @@ exports.deploylist = function(req, res, next) {
 			var lb = lbs[idx];
 			logger.error("lbs InstanceId: " + lb.InstanceId);
 			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
-			logger.info(cmd)
-			utils.runCommands([ cmd ], function(err, results) {
+			logger.info(cmd);
+			utils.runCommands([ cmd ], inx, function(err, results) {
 				logger.debug("==========err: " + err);
 				logger.debug("==========results: " + results);
 				if (err) {
@@ -319,6 +319,7 @@ exports.deploylist = function(req, res, next) {
 						var options = {
 							url : url,
 							method : 'GET',
+							jdx : jdx
 						};
 						request(options, function(err, response, body) {
 							var rslt = {
@@ -336,7 +337,7 @@ exports.deploylist = function(req, res, next) {
 							}
 							resultArry.push(rslt);
 
-							if (jdx == (pbips.length - 1)) {
+							if (this.jdx == (pbips.length - 1)) {
 								for ( var rs in resultArry) {
 									logger.error("==========rs.checkUrl: " + rs.checkUrl + "/statusCode:" + rs.statusCode);
 								}
