@@ -294,7 +294,7 @@ exports.deploylist = function(req, res, next) {
 			logger.error("lbs InstanceId: " + lb.InstanceId);
 			var cmd = 'su - ubuntu -c "aws ec2 describe-instances --instance-ids ' + lb.InstanceId + '"';
 			logger.info(cmd);
-			utils.runCommands([ cmd ], idx, function(err, options, results) {
+			utils.runCommands([ cmd ], idx, function(err, idx, results) {
 				logger.debug("==========err: " + err);
 				//logger.debug("==========results: " + results);
 				if (err) {
@@ -305,9 +305,9 @@ exports.deploylist = function(req, res, next) {
 				logger.error("==========pbip: " + pbip);
 				pbips.push(pbip);
 
-				logger.error("==========options.inx: " + options.inx);
+				logger.error("==========idx: " + idx);
 				logger.error("==========lbs.length: " + lbs.length);
-				if (options.inx == (lbs.length - 1)) {
+				if (idx == (lbs.length - 1)) {
 					logger.error("==========pbip1: " + pbips[0]);
 					logger.error("==========pbip2: " + pbips[1]);
 
