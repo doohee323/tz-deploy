@@ -18,19 +18,19 @@ module.exports = {
 			targetFile : 'ROOT.war',
 			postCmd: 'sudo systemctl stop tomcat; sudo systemctl start tomcat'
 		},
-		sodatransferboot: {
+		sodatransferjetty: {
 			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
 			postCmd: 'sudo systemctl stop sodatransfer; sudo systemctl start sodatransfer'
 		},
-		sodatransferui: {
-			awslb : "jetty-autoscaling",
-			checkUrl : "http://localhost/transfer/sodatransferInfo?=",
+		sodatransferttomcat: {
+			awslb : "tomcat-autoscaling",
+			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
-			postCmd: '#sync'
+			postCmd: 'sudo systemctl stop tomcat; sudo systemctl start tomcat; sudo rsync -avP /opt/tomcat/webapps/ROOT/static/dist/ /usr/share/nginx/html/'
 		}
 	},
 	mysql : {

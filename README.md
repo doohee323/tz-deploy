@@ -21,7 +21,7 @@
 	ex) node app.js sodatransfer &
 	
 	- run multiple app on a host with a different port
-	node app.js sodatransferboot 3030 &
+	node app.js sodatransferjetty 3030 &
 	
 	- make server service
 	/home/ubuntu/SodaTransferDeploy/config/etc/systemd/system$ bash register.sh sdtdc_boot
@@ -52,7 +52,7 @@ bash /mnt/SodaTransferDeploy/helpers/ready_war.sh sodatransfer ${WORKSPACE}
 
 or 
 
-bash /mnt/SodaTransferDeploy/helpers/ready_war.sh sodatransferboot ${WORKSPACE}
+bash /mnt/SodaTransferDeploy/helpers/ready_war.sh sodatransferjetty ${WORKSPACE}
 
 or
 

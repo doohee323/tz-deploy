@@ -415,12 +415,5 @@ exports.deploylist = function(req, res, next) {
 				} ], function(err, va) {
 			return next(0, va);
 		});
-
-		// http://ci.sodatransfer.com:3000/download/sodatransferboot_lastest.json
-		// http://13.124.49.60:3000/download/sodatransferboot_mine.json
-		// http://13.124.29.171:3000/download/sodatransferboot_mine.json
-		//
-		// http://13.124.49.60:8080/home2
-		// http://13.124.29.171:8080/home2
 	});
 };
