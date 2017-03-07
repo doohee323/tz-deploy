@@ -364,11 +364,17 @@ exports.deploylist = function(req, res, next) {
 								logger.error(err);
 								rslt.statusCode = -1;
 							} else if (response) {
-								var mineJson = JSON.parse(body);
-								rslt.file = mineJson.file;
-								rslt.size = mineJson.size;
-								rslt.version = mineJson.version;
-								rslt.statusCode = response.statusCode;
+								logger.error(body);
+								if(body) {
+									var mineJson = JSON.parse(body);
+									rslt.file = mineJson.file;
+									rslt.size = mineJson.size;
+									rslt.version = mineJson.version;
+									rslt.statusCode = response.statusCode;
+								} else {
+									logger.error(body);
+									rslt.statusCode = -1;
+								}
 							} else {
 								rslt.statusCode = -2;
 							}
