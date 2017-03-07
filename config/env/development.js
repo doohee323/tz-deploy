@@ -30,7 +30,7 @@ module.exports = {
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/opt/tomcat/webapps',
 			targetFile : 'ROOT.war',
-			postCmd: 'sudo rsync -avP /opt/tomcat/webapps/ROOT/static/dist/ /var/www/html/; sudo chmod o+rw /var/www/html/scripts'
+			postCmd: 'sudo rsync -avP /opt/tomcat/webapps/ROOT/static/dist/ /var/www/html/; sudo chown -Rf www-data:www-data /var/www/html; sudo chmod o+rw /var/www/html/scripts'
 		}
 	},
 	mysql : {
