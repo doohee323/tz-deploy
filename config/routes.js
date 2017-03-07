@@ -35,6 +35,13 @@ module.exports = function(app, fs) {
 		});
 	});
 
+	// ex) http://ci.sodatransfer.com:3000/free
+	app.get('/free/:appName', function(req, res) {
+		deploy.free(req, res, function(err, data) {
+			return utils.res(res, data);
+		});
+	});
+
 	// ex) http://ci.sodatransfer.com:3000/deploylist
 	app.get('/deploylist/:appName', function(req, res) {
 		deploy.deploylist(req, res, function(err, data) {

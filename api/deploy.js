@@ -250,9 +250,10 @@ exports.free = function(req, res, next) {
 	var logger = require('../app.js').winston;
 	var config = require('../app.js').config;
 	var fs = require('fs');
-	logger.debug("----config.rootPath:" + config.rootPath)
 
-	var appName = appName = req.params.appName;
+	var appName = req.params.appName;
+	logger.debug("----config.rootPath:" + config.rootPath)
+	logger.debug("----appName:" + appName)
 	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + appName + '_lock.json';
 	logger.debug("--------------lockPath:" + lockPath)
 	fs.exists(lockPath, function(exists) {
