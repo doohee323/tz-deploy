@@ -21,6 +21,4 @@ json='{"file": "'$file'", "version": "'$version'", "size": "'$size'"}'
 echo $json
 echo $json > $PJT_DIR/download/$1_lastest.json
 
-
-
 exit 0
