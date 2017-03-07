@@ -39,7 +39,7 @@ exports.deploy = function(req, res, cb) {
 	request(url, function(err, response, body) {
 		logger.debug(err)
 		logger.debug("--------------ciJson:" + body);
-		if (response.statusCode != 200) {
+		if (!response || response.statusCode != 200) {
 			return next(0, []);
 		}
 		var ciJson = JSON.parse(body);

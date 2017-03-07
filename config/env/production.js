@@ -29,7 +29,7 @@ module.exports = {
 			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
-			targetFile : 'ROOT.jar',
+			targetFile : 'ROOT.war',
 			postCmd: 'sudo systemctl stop tomcat; sudo systemctl start tomcat; sudo rsync -avP /opt/tomcat/webapps/ROOT/static/dist/ /usr/share/nginx/html/'
 		}
 	},
