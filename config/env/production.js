@@ -26,7 +26,7 @@ module.exports = {
 			postCmd: 'sudo systemctl stop sodatransfer; sudo systemctl start sodatransfer'
 		},
 		sodatransfertomcat: {
-			awslb : "tomcat-autoscaling",
+			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
