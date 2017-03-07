@@ -260,7 +260,7 @@ exports.free = function(req, res, next) {
 			fs.unlink(lockPath);
 			logger.info('free!!!!!')
 		} else {
-			logger.error('File not found, so not deleting.');
+			logger.error(lockPath + ' File not found, so not deleting.');
 		}
 	});
 	return next(0, []);
