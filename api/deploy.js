@@ -182,7 +182,7 @@ exports.deploy = function(req, res, cb) {
 									}
 								});
 							}
-						}, i * 30000);
+						}, i * 10000);
 					});
 				}, function(ciJson, callback) {
 					// 5. set local version and size with lastest one

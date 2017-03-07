@@ -9,7 +9,7 @@ module.exports = {
 	},
 	deploy : {
 		ciServer: "http://ci.test.com:3000/",
-		checkCnt : 10,
+		checkCnt : 30,
 		sourceDir : "download/",
 		sodatransfer: {
 			awslb : "jetty-autoscaling",
