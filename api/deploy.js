@@ -42,7 +42,13 @@ exports.deploy = function(req, res, cb) {
 		if (!response || response.statusCode != 200) {
 			return next(0, []);
 		}
-		var ciJson = JSON.parse(body);
+		var ciJson;
+		try {
+			ciJson = JSON.parse(body);
+		} catch (e){
+			logger.error(e);
+			ciJson = JSON.parse('{}');
+		}
 		var mineJsonPath = config.deploy.sourceDir + appName + '_mine.json';
 		logger.debug(mineJsonPath);
 		async.waterfall([
@@ -53,7 +59,13 @@ exports.deploy = function(req, res, cb) {
 							logger.error(err);
 							data = '{}';
 						}
-						var mineJson = JSON.parse(data);
+						var mineJson;
+						try {
+							mineJson = JSON.parse(data);
+						} catch (e){
+							logger.error(e);
+							mineJson = JSON.parse('{}');
+						}
 						logger.debug("--------------mineJson:" + mineJson)
 						// 2. comparing server's one with local one
 						if (ciJson.file != mineJson.file || ciJson.version != mineJson.version || ciJson.size != mineJson.size) {
@@ -288,7 +300,13 @@ exports.deploylist = function(req, res, next) {
 			logger.error("fail: " + err);
 			return next(0, []);
 		}
-		var lbJson = JSON.parse(results);
+		var lbJson;
+		try {
+			lbJson = JSON.parse(results);
+		} catch (e){
+			logger.error(e);
+			lbJson = JSON.parse('{}');
+		}
 		var lbs = lbJson.InstanceStates;
 		var pbips = [];
 		var va = {};
@@ -304,7 +322,13 @@ exports.deploylist = function(req, res, next) {
 								logger.error("fail: " + err);
 								return next(0, []);
 							}
-							var instJson = JSON.parse(results);
+							var instJson;
+							try {
+								instJson = JSON.parse(results);
+							} catch (e){
+								logger.error(e);
+								instJson = JSON.parse('{}');
+							}
 							var pbip = instJson.Reservations[0].Instances[0].PublicIpAddress;
 							pbips.push(pbip);
 							if (pbips.length == lbs.length) {
@@ -366,7 +390,13 @@ exports.deploylist = function(req, res, next) {
 							} else if (response) {
 								logger.error(body);
 								if(body) {
-									var mineJson = JSON.parse(body);
+									var mineJson;
+									try {
+										mineJson = JSON.parse(body);
+									} catch (e){
+										logger.error(e);
+										mineJson = JSON.parse('{}');
+									}
 									rslt.file = mineJson.file;
 									rslt.size = mineJson.size;
 									rslt.version = mineJson.version;
@@ -400,7 +430,13 @@ exports.deploylist = function(req, res, next) {
 							logger.error(err);
 							rslt.statusCode = -1;
 						} else if (response) {
-							var ciJson = JSON.parse(body);
+							var ciJson;
+							try {
+								ciJson = JSON.parse(body);
+							} catch (e){
+								logger.error(e);
+								ciJson = JSON.parse('{}');
+							}
 							rslt.file = ciJson.file;
 							rslt.size = ciJson.size;
 							rslt.version = ciJson.version;
