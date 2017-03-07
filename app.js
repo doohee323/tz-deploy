@@ -26,6 +26,7 @@ process.env.PORT = process.env.PORT || 3000;
 var config = require('./config/config');
 var auth = require('./config/authorization');
 
+console.log('config.rootPath:' + config.rootPath);
 console.log('process.env.NODE_ENV:' + process.env.NODE_ENV);
 console.log('process.env.PORT:' + process.env.PORT);
 
