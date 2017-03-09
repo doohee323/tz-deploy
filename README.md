@@ -1,6 +1,6 @@
 # tz-deploy app
 
-It's deployment tool working with Jenkins for Application on AWS supporting fail-over during deployment.
+It's a deployment tool working with Jenkins for Application on AWS supporting fail-over during deployment. It can be run as a server and clients, and clients pull the applications according to given version number and do the post-command.
 
 1. run the app on local env
 ```
