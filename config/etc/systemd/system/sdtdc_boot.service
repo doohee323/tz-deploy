@@ -1,13 +1,13 @@
 [Unit]
-Description=SodatTransferDeploy Client
+Description=tz-deploy Client
 After=network.target
 
 [Service]
 Type=simple
-PIDFile=/home/ubuntu/SodaTransferDeploy/download/sdtdc_boot.pid
-WorkingDirectory=/home/ubuntu/SodaTransferDeploy
-ExecStart=/usr/bin/node /home/ubuntu/SodaTransferDeploy/app.js sodatransferjetty
-ExecStop=/bin/kill -9 `ps -ef | grep sodatransferjetty | grep -v grep | awk '{print $2}'`
+PIDFile=/home/ubuntu/tz-deploy/download/sdtdc_boot.pid
+WorkingDirectory=/home/ubuntu/tz-deploy
+ExecStart=/usr/bin/node /home/ubuntu/tz-deploy/app.js topzonejetty
+ExecStop=/bin/kill -9 `ps -ef | grep topzonejetty | grep -v grep | awk '{print $2}'`
 
 Restart=on-failure
 RestartSec=30

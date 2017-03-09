@@ -8,23 +8,23 @@ else
 	cd /home/ubuntu
 fi
 
-git clone https://github.com/Sodacrew/SodaTransferDeploy.git
+git clone https://github.com/doohee323/tz-deploy.git
 
-cd SodaTransferDeploy
+cd tz-deploy
 
 npm install
 
 if [ "$1" == 'server' ]; then
-	echo "$1 is emptry! usage) install.sh sodatransfer"
+	echo "$1 is emptry! usage) install.sh topzone"
 	exit 1;
 fi
 
 if [ "$1" == 'server' ]; then
-	cd /mnt/SodaTransferDeploy/config/etc/systemd/system
+	cd /mnt/tz-deploy/config/etc/systemd/system
 	bash register.sh sdtds
 	echo bash register.sh sdtds
 else
-	cd /mnt/SodaTransferDeploy/config/etc/systemd/system
+	cd /mnt/tz-deploy/config/etc/systemd/system
 	bash register.sh $1
 	echo bash register.sh $1
 fi

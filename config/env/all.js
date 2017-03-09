@@ -29,7 +29,7 @@ process.env['database'] = 'sdtDeploy';
 if (process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {
 	process.env['url'] = 'ci.test.com:3000';
 } else if (process.env['NODE_ENV'] === 'production') {
-	process.env['url'] = 'ci.sodatransfer.com:3000';
+	process.env['url'] = 'ci.topzone.com:3000';
 }
 
 console.log('url:' + process.env['url']);

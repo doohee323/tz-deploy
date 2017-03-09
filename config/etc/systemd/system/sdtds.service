@@ -1,12 +1,12 @@
 [Unit]
-Description=SodatTransferDeploy Server
+Description=tz-deploy Server
 After=network.target
 
 [Service]
 Type=simple
-PIDFile=/mnt/SodaTransferDeploy/download/sdtds.pid
-WorkingDirectory=/mnt/SodaTransferDeploy
-ExecStart=/usr/bin/node /mnt/SodaTransferDeploy/app.js server
+PIDFile=/mnt/tz-deploy/download/sdtds.pid
+WorkingDirectory=/mnt/tz-deploy
+ExecStart=/usr/bin/node /mnt/tz-deploy/app.js server
 ExecStop=/bin/killall node
 
 Restart=on-failure

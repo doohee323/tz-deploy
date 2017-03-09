@@ -5,27 +5,27 @@ module.exports = {
 		type : "client",
 		name : "sdt-deploy - Production",
 		port : 3000,
-		domain : 'http://sodatransfer.com'
+		domain : 'http://topzone.com'
 	},
 	deploy : {
-		ciServer: "http://ci.sodatransfer.com:3000/",
+		ciServer: "http://ci.topzone.com:3000/",
 		checkCnt : 30,
 		sourceDir : "download/",
-		sodatransfer: {
+		topzone: {
 			awslb : "jetty-autoscaling",
-			checkUrl : "http://localhost:8080/transfer/sodatransferInfo?=",
+			checkUrl : "http://localhost:8080/transfer/topzoneInfo?=",
 			targetDir : '/opt/tomcat/webapps',
 			targetFile : 'ROOT.war',
 			postCmd: 'sudo systemctl stop tomcat; sudo systemctl start tomcat'
 		},
-		sodatransferjetty: {
+		topzonejetty: {
 			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
-			postCmd: 'sudo systemctl stop sodatransfer; sudo systemctl start sodatransfer'
+			postCmd: 'sudo systemctl stop topzone; sudo systemctl start topzone'
 		},
-		sodatransfertomcat: {
+		topzonetomcat: {
 			awslb : "jetty-autoscaling",
 			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
 			targetDir : '/opt/tomcat/webapps',
@@ -35,9 +35,9 @@ module.exports = {
 	},
 	mysql : {
 		env : "production",
-		dbUsername : "root",
-		dbPassword : "1",
-		dbHost : "52.0.156.21",
+		dbUsername : "",
+		dbPassword : "",
+		dbHost : "52.0.156.1",
 		port : 3306,
 		database : "sdtDeploy",
 		connectionLimit : 100,

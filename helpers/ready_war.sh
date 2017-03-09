@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PJT_DIR=/mnt/SodaTransferDeploy
+export PJT_DIR=/mnt/tz-deploy
 
 path=`ls $2/target/*.war`
 echo $path
