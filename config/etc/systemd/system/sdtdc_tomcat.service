@@ -1,5 +1,5 @@
 [Unit]
-Description=tz-deploy Client
+Description=TopzoneDeploy Client
 After=network.target
 
 [Service]

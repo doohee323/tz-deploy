@@ -1,15 +1,24 @@
 'use strict';
 
+var postCmd = "sudo chown -Rf tomcat:tomcat /opt/tomcat; " +
+			  "sudo rm -Rf /var/www/html_bak; " + 
+			  "sudo mv /var/www/html /var/www/html_bak; " + 
+			  "sudo mkdir -p /var/www/html; " + 
+			  "sudo rsync -avP /opt/tomcat/webapps/ROOT/static/ /var/www/html/ && " + 
+			  "sudo rsync -avP /opt/tomcat/webapps/ROOT/static/dist/ /var/www/html/; " + 
+			  "sudo chown -Rf www-data:www-data /var/www/html; "
+
 module.exports = {
 	app : {
 		type : "client",
 		name : "sdt-deploy - Production",
 		port : 3000,
-		domain : 'http://topzone.com'
+		domain : 'http://topzone.com',
+		user : 'ubuntu'
 	},
 	deploy : {
 		ciServer: "http://ci.topzone.com:3000/",
-		checkCnt : 30,
+		checkCnt : 15,
 		sourceDir : "download/",
 		topzone: {
 			awslb : "jetty-autoscaling",
@@ -20,26 +29,35 @@ module.exports = {
 		},
 		topzonejetty: {
 			awslb : "jetty-autoscaling",
-			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
+			checkUrl : "http://localhost:8080/transfer/topzoneInfo?=",
 			targetDir : '/home/ubuntu',
 			targetFile : 'ROOT.jar',
 			postCmd: 'sudo systemctl stop topzone; sudo systemctl start topzone'
 		},
 		topzonetomcat: {
-			awslb : "jetty-autoscaling",
-			checkUrl : "http://localhost:8080/noticeBar2/get?type=greeting",
+			awslb : "war-autoscaling",
+			regions : "ap-northeast-2,us-west-1",
+			checkUrl : "http://localhost:8080/transfer/topzoneInfo?=",
 			targetDir : '/opt/tomcat/webapps',
 			targetFile : 'ROOT.war',
-			postCmd: 'sudo rsync -avP /opt/tomcat/webapps/ROOT/static/dist/ /var/www/html/; sudo chown -Rf www-data:www-data /var/www/html; sudo chmod o+rw /var/www/html/scripts'
-		}
+			postCmd: postCmd
+		},
+		topzonetomcat2: {
+			awslb : "war-autoscaling-prod",
+			regions : "us-east-1",
+			checkUrl : "http://localhost:8080/transfer/topzoneInfo?=",
+			targetDir : '/opt/tomcat/webapps',
+			targetFile : 'ROOT.war',
+			postCmd: postCmd
+		}		
 	},
 	mysql : {
 		env : "production",
-		dbUsername : "",
-		dbPassword : "",
-		dbHost : "52.0.156.1",
+		dbUsername : "root",
+		dbPassword : "1",
+		dbHost : "52.0.156.21",
 		port : 3306,
-		database : "sdtDeploy",
+		database : "SdtDeploy",
 		connectionLimit : 100,
 		poolUseYn : true
 	},

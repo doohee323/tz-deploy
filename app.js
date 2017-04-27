@@ -41,56 +41,72 @@ fs.exists(config.logs_dir, function(exists) {
 	}
 });
 
-var app = express();
 
-winston.add(winston.transports.DailyRotateFile, {
-	level : 'debug',
-	json : false,
-	filename : config.logs_dir + '/debug-',
-	datePattern : 'yyyy-MM-dd.log'
-});
+//var cluster = require('cluster');
+//if(cluster.isMaster) {
+//    var numWorkers = require('os').cpus().length;
+//    console.log('Master cluster setting up ' + numWorkers + ' workers...');
+//    for(var i = 0; i < numWorkers; i++) {
+//        cluster.fork();
+//    }
+//    cluster.on('online', function(worker) {
+//        console.log('Worker ' + worker.process.pid + ' is online');
+//    });
+//    cluster.on('exit', function(worker, code, signal) {
+//        console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+//        console.log('Starting a new worker');
+//        cluster.fork();
+//    });
+//} else {
+	var app = express();
+	winston.add(winston.transports.DailyRotateFile, {
+		level : 'debug',
+		json : false,
+		filename : config.logs_dir + '/debug-',
+		datePattern : 'yyyy-MM-dd.log'
+	});
 
-process.argv.forEach(function(val, index, array) {
-	if (index == 2) {
-		if (val == 'server') {
-			config.app.type = 'server';
-		} else {
-			config.app.appName = val;
+	process.argv.forEach(function(val, index, array) {
+		if (index == 2) {
+			if (val == 'server') {
+				config.app.type = 'server';
+			} else {
+				config.app.appName = val;
+			}
 		}
-	}
-	if (index == 3) {
-		config.app.port = parseInt(val);
-	}
-});
-console.log('config.app.type: ' + config.app.type);
+		if (index == 3) {
+			config.app.port = parseInt(val);
+		}
+	});
+	console.log('config.app.type: ' + config.app.type);
 
-var appExports = module.exports = {};
-appExports.config = config;
-appExports.utils = utils;
-appExports.winston = winston;
+	var appExports = module.exports = {};
+	appExports.config = config;
+	appExports.utils = utils;
+	appExports.winston = winston;
 
-// Express settings
-require('./config/express')(app);
+	// Express settings
+	require('./config/express')(app);
 
-if (config.app.type == 'client') {
-	var cron = require('node-cron');
-	cron.schedule('* * * * *', function() {
-		deploy.deploy(function() {
-			console.log('deploy~~~!!!!');
+	if (config.app.type == 'client') {
+		var cron = require('node-cron');
+		cron.schedule('* * * * *', function() {
+			deploy.deploy(function() {
+				console.log('deploy~~~!!!!');
+			});
 		});
-	});
-} else {
-	var lockPath = config.rootPath + '/' + config.deploy.sourceDir + '*_lock.json';
-	var cmd = 'sudo /bin/rm -rf ' + lockPath;
-	console.log(cmd)
-	utils.runCommands([ cmd ], {}, function(err, options, results) {
-		console.log("==========err: " + err);
-		console.log("==========results: " + results);
-		if (err) {
-			console.log("fail: 6. deploy the lastest one")
-		}
-	});
-
-}
+	} else {
+		var lockPath = config.rootPath + '/' + config.deploy.sourceDir + '*_lock.json';
+		var cmd = 'sudo /bin/rm -rf ' + lockPath;
+		console.log(cmd)
+		utils.runCommands([ cmd ], {}, function(err, options, results) {
+			console.log("==========err: " + err);
+			console.log("==========results: " + results);
+			if (err) {
+				console.log("fail: 6. deploy the lastest one")
+			}
+		});
+	}
+//}
 
 console.log('started!!!!');

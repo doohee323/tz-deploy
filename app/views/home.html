@@ -1,0 +1,96 @@
+<div ng-include="'views/include/header.html'"></div>
+
+<ng-form name="homeFrm" ng-init="init(this)">
+
+<div class=container>
+	<div class=header>
+		<h3 class=text-muted>Deploy Manager</h3>
+	</div>
+	<div class=row>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<label for="project_id" class="col-md-2 control-label">Project:</label>
+				<div class="col-md-9">
+					<input type='text' id='project_id' ng-model='project_id' value='' style='width: 200px' />
+				</div>
+				<div class="col-md-1" style='text-align: right'>
+					<input type='button' id='getList' value='Query'
+						ng-click='getList();' />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=row>
+		<ul class="nav nav-tabs" id=view
+			style="margin-bottom: 10px; font-size: 11pt">
+			<li class='active' id='deploy'><a ng-click="selectView('deploy')">Deploy
+					Status</a></li>
+			<li class='inactive' id='service'><a ng-click="selectView('service')">Service
+					Status</a></li>
+		</ul>
+		<div id=result>
+			<div class='deploy_view'>
+				<table id='deploy_table'
+					class="data table table-bordered table-condensed table-responsive table-striped dataTable no-footer"
+					data-paging="false" data-select="" role="grid">
+					<thead>
+						<tr role="row">
+							<th style="width: 284px;">Domain</th>
+							<th tabindex="0" style="width: 214px;">Server type</th>
+							<th tabindex="0" style="width: 153px;">App version</th>
+							<th tabindex="0" style="width: 269px;">Deploy file</th>
+							<th tabindex="0" style="width: 269px;">File size</th>
+							<th tabindex="0" style="width: 269px;">Health statusCode</th>
+							<th tabindex="0" style="width: 119px;">Manage</th>
+						</tr>
+					</thead>
+					<tbody id='deploy_row' style="display: none">
+						<tr role="row" class="even">
+							<td><spana openurl='DOMAIN' target='_blank'>DOMAIN
+								</spana></td>
+							<td>TYPE</td>
+							<td>VERSION</td>
+							<td>FILE</td>
+							<td>SIZE</td>
+							<td>STATUSCODE</td>
+							<td><spana openurl='CHECKURL' target='_blank'
+									class='btn btn-primary btn-sm'> <span
+									class='glyphicon glyphicon-wrench'></span> Check </spana></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class='service_view' style="display: none">
+				<table id='service_table'
+					class="data table table-bordered table-condensed table-responsive table-striped dataTable no-footer"
+					data-paging="false" data-select="" role="grid">
+					<thead>
+						<tr role="row">
+							<th tabindex="0" style="width: 284px;">Domain</th>
+							<th tabindex="0" style="width: 214px;">Server type</th>
+							<th tabindex="0" style="width: 269px;">Health statusCode</th>
+							<th tabindex="0" style="width: 119px;">Manage</th>
+						</tr>
+					</thead>
+					<tbody id='service_row'>
+						<tr role="row" class="even">
+							<td><spana openurl='DOMAIN2' target='_blank'>DOMAIN2
+								</spana></td>
+							<td>TYPE2</td>
+							<td>STATUSCODE2</td>
+							<td><spana openurl='CHECKURL2' target='_blank'
+									class='btn btn-primary btn-sm'> <span
+									class='glyphicon glyphicon-wrench'></span> Check </spana></td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>
+		</div>
+	</div>
+</div>
+<div id="dialog-message" title="Rule tree">
+	<iframe id='tree_frm' src='' frameborder="0" scrolling="no"></iframe>
+</div>
+</ng-form>
+
+<div ng-include="'views/include/footer.html'"></div>

@@ -23,7 +23,7 @@ module.exports = {
 }
 
 process.env['appKeys'] = 'app_info';
-process.env['database'] = 'sdtDeploy';
+process.env['database'] = 'SdtDeploy';
 
 // url for password email
 if (process.env['NODE_ENV'] === 'local' || process.env['NODE_ENV'] === 'development') {

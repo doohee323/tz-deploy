@@ -1,5 +1,5 @@
 [Unit]
-Description=tz-deploy Server
+Description=TopzoneDeploy Server
 After=network.target
 
 [Service]

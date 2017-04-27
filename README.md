@@ -1,7 +1,5 @@
 # tz-deploy app
 
-It's a deployment tool working with Jenkins for Application on AWS supporting fail-over during deployment. It can be run as a server and clients, and clients pull the applications according to given version number and do the post-command.
-
 1. run the app on local env
 ```
 - run server
@@ -17,13 +15,15 @@ It's a deployment tool working with Jenkins for Application on AWS supporting fa
 	
 	- logs
 		cd /mnt/tz-deploy/logs
+		
+	- UI: http://localhost:3000
 	
 - run client
 	/mnt/tz-deploy$ node app.js ${appName} &
 	ex) node app.js topzone &
 	
 	- run multiple app on a host with a different port
-	node app.js topzonejetty 3030 &
+	node app.js topzonetomcat 3000 &
 	
 	- make server service
 	/home/ubuntu/tz-deploy/config/etc/systemd/system$ bash register.sh sdtdc_boot
@@ -43,8 +43,10 @@ It's a deployment tool working with Jenkins for Application on AWS supporting fa
 	npm install devtool -g
 	devtool app.js --index index.html --watch
 	
+	- test: curl http://localhost:3000/deploylist/topzonetomcat
+	
 	with appName parameter
-	devtool app.js topzone --index index.html --watch
+	devtool app.js topzonetomcat2 --index index.html --watch
 	
 ```
 

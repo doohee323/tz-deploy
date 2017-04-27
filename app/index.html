@@ -1,53 +1,110 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-  </head>
-  <body ng-app="sdtDeploy">
-    <!--[if lte IE 8]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<head>
+<base href="/">
+</base>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Topzone</title>
+<meta name="author" content="Topzone Inc.">
+<meta name="description"
+	content="Refreshing Money Transfer! Minimal Fee. Best Rate. No Hassle.">
+<meta name="copyright" content="Topzone Inc.">
+<meta name="keyword"
+	content="topzone, tzcrew, money transfer,transfer,currency, transfer money abroad, remittance ">
+
+<link rel="shortcut icon" href="/img/favicon/favicon.ico">
+
+<!--[if lt IE 9]>
+	<script src="/js/css3-mediaqueries.js"></script>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<!-- build:css(.) styles/vendor.css -->
+<!-- bower:css -->
+<link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css" />
+<link rel="stylesheet" href="bower_components/datatables.net-bs/css/dataTables.bootstrap.css" />
+<!-- endbower -->
+<!-- endbuild -->
+<!-- build:css(.tmp) styles/main.css -->
+<link rel="stylesheet" href="styles/main.css" />
+<!-- endbuild -->
+
+</head>
+<body ng-app="SdtDeploy">
+	<!--[if lte IE 8]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-	<div class="wrap">
-	    <div ng-view=""></div>
-	</div>
+	<div ng-view="" autoscroll="true"></div>
 
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-messages/angular-messages.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
-    <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+	<!-- build:js(.) scripts/vendor.js -->
+	<!-- bower:js -->
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+	<script src="bower_components/angular-messages/angular-messages.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.js"></script>
+	<script src="bower_components/angular-route/angular-route.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="bower_components/angular-mocks/angular-mocks.js"></script>
+	<script src="bower_components/angular-touch/angular-touch.js"></script>
+	<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+	<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="bower_components/datatables.net/js/jquery.dataTables.js"></script>
+	<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+	<!-- endbower -->
+	<!-- endbuild -->
 
-    <script src="scripts/libs/moment.js"></script>
-<!--     <script src="scripts/libs/moment-with-locales.min.js"></script> -->
-    
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/utils/utils.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/utils/storage.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <!-- endbuild -->
+	<!-- Google Analytics & Facebook Pixel Code -->
+	<!-- DO NOT MODIFY -->
+	<script>
+		var language = navigator.languages && navigator.languages[0] || // Chrome / Firefox
+		navigator.language || // All browsers
+		navigator.userLanguage; // IE <= 10
+		$("html").attr("lang", language.substr(0, 2));
+
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-75667285-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+	<noscript></noscript>
+
+	<!-- DO NOT MODIFY -->
+	<!-- End Google Analytics & Facebook Pixel Code -->
+
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/directives.js"></script>
+	<script src="scripts/filters.js"></script>
+
+	<script src="scripts/utils/utils.js"></script>
+	<script src="scripts/utils/storage.js"></script>
+	<script src="scripts/utils/commcd.js"></script>
+	<script src="scripts/services/socket_service.js"></script>
+	<script src="scripts/services/session_service.js"></script>
+	<script src="scripts/services/interceptor.js"></script>
+
+	<script src="scripts/controllers/include/default.js"></script>
+	<script src="scripts/controllers/include/header.js"></script>
+	<script src="scripts/controllers/include/footer.js"></script>
+	<script src="scripts/controllers/home.js"></script>
+	<!-- endbuild -->
+
 </body>
 </html>

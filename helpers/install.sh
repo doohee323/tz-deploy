@@ -8,7 +8,7 @@ else
 	cd /home/ubuntu
 fi
 
-git clone https://github.com/doohee323/tz-deploy.git
+git clone https://github.com/Topzone/tz-deploy.git
 
 cd tz-deploy
 
